@@ -5,13 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>WeatherApp</title>
         <link rel="stylesheet" href="./assets/css/style.css">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     </head>
     <body>
         <div class="blurFilter">
             <div class="container">
-                <div class="containerLeft">
+                <div class="containerLeft hidden">
                     <div class="island islandTopLeft">
-                        test test
+                        <h2>Title</h2>
                     </div>
         
                     <div class="island islandBottomLeft">
@@ -20,16 +21,25 @@
                 </div>
 
                 <div class="containerMiddle">
-                    <div class="island islandTopCenter">
-    
+                    <div class="island islandTopCenter initialPhase">
+                        <div class="searchContainer">
+                            <input type="text" name="country" id="country" placeholder="Country">
+                            <button type="submit" class="searchButton">
+                                <i class='bx bx-search-alt' style='color:rgba(255,255,255,0.2)'></i>
+                            </button>
+                        </div>
+
+                        <div class="countryOptions">
+
+                        </div>
                     </div>
         
-                    <div class="island islandBottomCenter">
+                    <div class="island islandBottomCenter hidden initialPhaseBottom">
         
                     </div>
                 </div>
 
-                <div class="containerRight">
+                <div class="containerRight hidden">
                     <div class="island islandTopRight">
     
                     </div>

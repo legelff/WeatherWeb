@@ -32,3 +32,15 @@ document.querySelectorAll('.island').forEach(island => {
         island.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.5)'; // Reset to original shadow
     });
 });
+
+// testing
+var search = document.querySelector(".searchButton")
+
+search.addEventListener("click", function() {
+    document.querySelector(".islandTopCenter").classList.remove("initialPhase")
+    document.querySelector(".islandTopCenter").classList.add("removeMargin")
+    document.querySelector(".islandBottomCenter").classList.remove("initialPhaseBottom", "hidden")
+    document.querySelector(".islandBottomCenter").classList.add("fade-in")
+    document.querySelector(".searchContainer").classList.add("fade-out")
+    document.querySelector(".countryOptions").classList.add("fade-out")
+})
