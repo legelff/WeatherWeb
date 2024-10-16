@@ -8,6 +8,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    overflow-x: hidden;
 }
 
 h1, h2, h3 {
@@ -39,10 +40,9 @@ h1, h2, h3 {
 }
 
 .island {
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(17, 25, 40, 0.30);
+    background-color: rgba(255, 255, 255, 0.09);
     border-radius: 12px;
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.125);
     padding: 20px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
@@ -52,6 +52,7 @@ h1, h2, h3 {
 
 .islandTopLeft, .islandBottomLeft, .islandTopRight, .islandBottomRight {
     flex: auto;
+    transition: all 0.5s ease-out;
 }
 
 .islandTopCenter {
@@ -91,7 +92,7 @@ h1, h2, h3 {
 
 .searchButton {
     background-color: rgba(255, 255, 255, 0.00);
-    border: 1px solid rgba(255, 255, 255, 0.125);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 5px;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
@@ -99,14 +100,23 @@ h1, h2, h3 {
 }
 
 .searchButton:hover {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.9);
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.bx {
+    color:rgba(255,255,255,0.5);
+    transition: all 0.3s ease-out;
+}
+
+.bx:hover {
+    color:rgba(255,255,255,0.9);
 }
 
 #country {
     background-color: rgba(255, 255, 255, 0.00);
-    border: 1px solid rgba(255, 255, 255, 0.125);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     color: white;
     padding: 5px;
     border-top-left-radius: 12px; 
@@ -115,13 +125,13 @@ h1, h2, h3 {
 }
 
 #country:focus {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.9);
     outline: none;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 #country::placeholder {
-    color: rgba(255,255,255,0.200);
+    color: rgba(255,255,255,0.5);
 }
 
 .countryOptions {
@@ -130,7 +140,7 @@ h1, h2, h3 {
     height: 400px;
     margin-top: 25px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.125);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .hidden {
@@ -147,6 +157,14 @@ h1, h2, h3 {
 
 .fade-in {
     animation: fadeIn 0.5s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 1.2s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 1.2s ease-out forwards;
 }
 
 @keyframes fadeOut {
@@ -173,5 +191,24 @@ h1, h2, h3 {
     }
     100% {
         margin-top: 0;
+    }
+}
+
+/* Sliding animation for left and right containers */
+@keyframes slideInLeft {
+    0% {
+        transform: translateX(-50vw); /* Off-screen to the left */
+    }
+    100% {
+        transform: translateX(0); /* Final position (on-screen) */
+    }
+}
+
+@keyframes slideInRight {
+    0% {
+        transform: translateX(50vw); /* Off-screen to the right */
+    }
+    100% {
+        transform: translateX(0); /* Final position (on-screen) */
     }
 }

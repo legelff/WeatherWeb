@@ -43,4 +43,8 @@ search.addEventListener("click", function() {
     document.querySelector(".islandBottomCenter").classList.add("fade-in")
     document.querySelector(".searchContainer").classList.add("fade-out")
     document.querySelector(".countryOptions").classList.add("fade-out")
+    document.querySelector(".containerRight").classList.remove("hidden")
+    document.querySelector(".containerRight").classList.add("slide-in-right")
+    document.querySelector(".containerLeft").classList.remove("hidden")
+    document.querySelector(".containerLeft").classList.add("slide-in-left")
 })
