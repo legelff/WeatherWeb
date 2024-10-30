@@ -259,6 +259,14 @@ function displayForecastData(data) {
         day.addEventListener("click", function() {
             displayMainData(data, index);
     
+            // Scroll to the 7th hourly item when d1 or d2 is clicked
+            if (index === 1 || index === 2) { // d1 is index 1, d2 is index 2
+                const seventhItem = document.querySelectorAll('.hourlyItem')[7]; // 0-based index
+                if (seventhItem) {
+                    const hourlyContainer = document.querySelector('.hourlyContainer');
+                    hourlyContainer.scrollLeft = seventhItem.offsetLeft;
+                }
+            }
         });
     });
     
