@@ -107,9 +107,15 @@ function searchP1(e) {
 // Function to display current weather data in top center
 function displayMainData(data, index = 0) {
     const weatherContainer = document.querySelector('.weather');
-    
+
+    let date = new Date(data.forecast.forecast.forecastday[index].date);
+    let formattedDate = new Intl.DateTimeFormat('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+    }).format(date);
+
     // Extract relevant information from data
-    const date = data.forecast.forecast.forecastday[index].date;
     const location = data.forecast.location.name;
     const country = data.forecast.location.country;
     const temperature = data.forecast.forecast.forecastday[index].day.avgtemp_c;
@@ -154,7 +160,7 @@ function displayMainData(data, index = 0) {
     }
 
     weatherContainer.innerHTML = `
-        <h2>${date} Weather in ${location}, ${country}</h3>
+        <h2>${formattedDate} Weather in ${location}, ${country}</h3>
         <img src="${icon}">
         <p>Temperature: ${temperature}°C</p>
         <p>Condition: ${condition}</p>
@@ -220,21 +226,28 @@ function displayForecastData(data) {
     for(var day = 0; day < 3; day++) {
         
         const days = data.forecast.forecast.forecastday[day];
+        let time_hour = days.date; // Default label as date
+        if (day == 0) {
+            time_hour = "Today";
+        } else if (day == 1) {
+            time_hour = "Tomorrow";
+        } else if (day == 2) {
+            time_hour = "Overmorrow";
+        }
         
         // if you want to get the whole day information replace hour by day.
         const rain = days.day.daily_chance_of_rain;
         const image = "https:" + days.day.condition.icon;
         const desc = days.day.condition.text;
         const temp = days.day.avgtemp_c;
-        const time_hour = days.date;
     
         weatherContainer.innerHTML += `
             <div class="dayDiv d${day}">
                 <h4>${time_hour}</h4>
                 <img src="${image}">
-                <p>${desc}</p>
-                <p>${Math.round(temp)} C</p>
-                <p>${rain} %</p>
+                <p style="color:rgba(255, 255, 255, 0.8);">${desc}</p>
+                <p>${Math.round(temp)}°C</p>
+                <p class="lastDayItem" style="color:lightblue;">${rain}%</p>
             </div>
         `;
         
@@ -260,13 +273,20 @@ function displayHourlyData(data, index) {
     let end = 24;
     // For current data and not display hour that is passed
     if(index == 0) {
-        const now = new Date();
-        start = now.getHours();
+        // const now = new Date();
+        // start = now.getHours();
+        let localtime = data.forecast.location.localtime
+        start = localtime.split(" ")[1].split(":")[0];
     }
     for (var hour = start; hour < end; hour++) {
         const hourly = data.forecast.forecast.forecastday[index].hour[hour];
 
-        const time = String(new Date(hourly.time).getHours()).padStart(2, '0') + ":00";
+        let time = String(new Date(hourly.time).getHours()).padStart(2, '0') + ":00";
+
+        if (hour == start && time != "00:00") {
+            time = "Now"
+        }
+
         const image = "https:" + hourly.condition.icon;
         // const desc = hourly.condition.text;
         const temp = hourly.temp_c;

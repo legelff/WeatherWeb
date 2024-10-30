@@ -55,7 +55,7 @@ h1, h2, h3 {
 }
 
 .islandTopLeft, .islandBottomLeft, .islandTopRight, .islandBottomRight {
-    flex: auto;
+    flex: 50%;
     transition: all 0.5s ease-out;
 }
 
@@ -83,16 +83,30 @@ h1, h2, h3 {
     width: calc(33.33% - 20px); /* Divide width and leave space for margins */
     background-color: rgba(255, 255, 255, 0.00);
     height: 100%;
-    margin-top: 25px;
+    /* margin-top: 25px; */
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     position: relative;
-    margin: 0 10px; /* Horizontal margin for equal spacing */
+    /* margin: 0 10px; */
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     cursor: pointer;
+    text-align: center;
     transition: all 0.3s ease-out;
+}
+
+.dayDiv p, .dayDiv h4, .dayDiv img {
+    margin: 0;
+}
+
+.dayDiv h4 {
+    margin-top: 10px;
+}
+
+.dayDiv .lastDayItem {
+    margin-bottom: 10px;
 }
 
 .dayDiv:hover {
