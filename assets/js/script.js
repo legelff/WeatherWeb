@@ -313,7 +313,7 @@ function displayHourlyData(data, index) {
 
 function DisplayAstronomy(data, index) {
 
-    const astronomyWeather = document.querySelector(".islandBottomRight");
+    const astronomyWeather = document.querySelector(".astronomyContainer");
     
     const astronomy = data.forecast.forecast.forecastday[index].astro;
     
