@@ -1,3 +1,7 @@
+let forecast_days = [];
+var data = {};
+
+
 document.querySelectorAll('.island').forEach(island => {
     island.addEventListener('mousemove', (e) => {
         // Get the dimensions of the island
@@ -48,12 +52,6 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-// event listeners for day 1, 2 and 3 for islandBottomCenter - FOR KAROLIS
-document.querySelectorAll(".dayDiv").forEach(function(d) {
-    d.addEventListener("click", function() {
-        // make logic here
-    })
-})
 
 function searchP1(e) {
     e.preventDefault(); // Prevents default button behavior
@@ -87,30 +85,24 @@ function searchP1(e) {
 }
 
 // Function to display current weather data in top center
-function displayCurrentData(data) {
+function displayMainData(data, index = 0) {
     const weatherContainer = document.querySelector('.weather');
     
     // Extract relevant information from data
-    const location = data.current.location.name;
-    const country = data.current.location.country;
-    const temperature = data.current.current.temp_c;
-    const condition = data.current.current.condition.text;
-    const feels_like = data.current.current.feelslike_c;
-    const wind_speed = data.current.current.wind_kph;
-    const humidity = data.current.current.humidity;
-    const uv = data.current.current.uv;
-    const wind_direction = data.current.current.wind_dir;
-    const clouds = data.current.current.condition.text;
-    const air_qual = data.current.current.air_quality["us-epa-index"]; // You can do that the air quality will show as good. bad and etc.
-    // US - EPA standard.
-    // 1 means Good
-    // 2 means Moderate
-    // 3 means Unhealthy for sensitive group
-    // 4 means Unhealthy
-    // 5 means Very Unhealthy
-    // 6 means Hazardous
+    const date = data.forecast.forecast.forecastday[index].date;
+    const location = data.forecast.location.name;
+    const country = data.forecast.location.country;
+    const temperature = data.forecast.forecast.forecastday[index].day.avgtemp_c;
+    const condition = data.forecast.forecast.forecastday[index].day.condition.text;
+    const icon = data.forecast.forecast.forecastday[index].day.condition.icon;
+    const max_wind_speed = data.forecast.forecast.forecastday[index].day.maxwind_kph;
+    const humidity = data.forecast.forecast.forecastday[index].day.avghumidity;
+    const uv = data.forecast.forecast.forecastday[index].day.uv;
+    const air_qual = data.forecast.forecast.forecastday[index].day.air_quality["us-epa-index"]; 
+    const rain_chance = data.forecast.forecast.forecastday[index].day.daily_chance_of_rain;
+    const rain_level = data.forecast.forecast.forecastday[index].day.totalprecip_mm;
     var qualDef = ""
-
+    
     switch (air_qual) {
         case 1:
             qualDef = "Good"
@@ -141,20 +133,20 @@ function displayCurrentData(data) {
             break;
     }
 
-
     weatherContainer.innerHTML = `
-        <h2>Weather in ${location}, ${country}</h3>
+        <h2>${date} Weather in ${location}, ${country}</h3>
+        <img src="${icon}">
         <p>Temperature: ${temperature}°C</p>
-        <p>Feels like: ${feels_like}°C</p>
         <p>Condition: ${condition}</p>
-        <p>Wind kph: ${wind_speed}</p>
-        <p>Wind direction: ${wind_direction}</p>
+        <p>Wind kph: ${max_wind_speed}</p>
         <p>Humidity: ${humidity}</p>
         <p>UV: ${uv}</p>
-        <p>Clouds: ${clouds}</p>
         <p>Air Quality: ${qualDef}</p>
+        <p>Chance of rain: ${rain_chance}%</p>
+        <p>precipitation: ${rain_level} mm</p>
     `;
     weatherContainer.classList.remove('hidden');
+    displayHourlyData(data, index);
 
     // for dynamic background in top left island (to do)
     // const initialCondition = data.current.current.condition.text.toLowerCase();
@@ -205,34 +197,79 @@ function displayCurrentData(data) {
 function displayForecastData(data) {
     const weatherContainer = document.querySelector('.islandBottomCenter');
     for(var day = 0; day < 3; day++) {
-
-        for(var hour = 0; hour < 23; hour++) {
-            
-            
-            // now its selecting hour. if you want to change which our change .hour[0-23] 
-             // change 0 to 1 or 2 to get tomorrow or 2 days later
-            
-            const hour = data.forecast.forecast.forecastday[day].hour[hour];
-            console.log(hour);
-            
-            // if you want to get the whole day information replace hour by day.
-            const rain = hour.chance_of_rain;
-            const image = hour.condition.icon;
-            const temp = hour.temp_c;
-            const time_hour = hour.time;
         
+        const days = data.forecast.forecast.forecastday[day];
         
-            weatherContainer.innerHTML += `
-                <h3>Weather in ${location}</h3>
-                <img src=${image}>
-                <p>Temperature: ${temp}</p>
-                <p>Rain Chance: ${rain}</p>
-                <p>Hour: ${time_hour}</p>
-            `;
-        }
+        // if you want to get the whole day information replace hour by day.
+        const rain = days.day.daily_chance_of_rain;
+        const image = days.day.condition.icon;
+        const desc = days.day.condition.text;
+        const temp = days.day.avgtemp_c;
+        const time_hour = days.date;
+    
+        weatherContainer.innerHTML += `
+            <div class="dayDiv d${day}">
+                <h4>${time_hour}</h4>
+                <img src="${image}">
+                <p>${desc}</p>
+                <p>${Math.round(temp)} C</p>
+                <p>${rain} %</p>
+            </div>
+        `;
+        
     }
     // this is only for hourly
     weatherContainer.classList.remove('hidden');
+
+    document.querySelectorAll(".dayDiv").forEach(function(day, index) {
+        day.addEventListener("click", function() {
+            displayMainData(data, index);
+    
+        });
+    });
+    
+    
+}
+
+function displayHourlyData(data, index) {
+    const hourlyWeather = document.querySelector(".hourlyContainer");
+    hourlyWeather.innerHTML = null;
+    let start = 0;
+    let end = 24;
+    // For current data and not display hour that is passed
+    if(index == 0) {
+        const now = new Date();
+        start = now.getHours();
+    }
+    for (var hour = start; hour < end; hour++) {
+        const hourly = data.forecast.forecast.forecastday[index].hour[hour];
+
+        const time = String(new Date(hourly.time).getHours()).padStart(2, '0') + ":00";
+        const image = hourly.condition.icon;
+        const desc = hourly.condition.text;
+        const temp = hourly.temp_c;
+        const rain_chance = hourly.chance_of_rain;
+
+        hourlyWeather.innerHTML += `
+            <div>
+                <h5>${time}</h5>
+                <img src="${image}">
+                <p>${desc}</p>
+                <p>${Math.round(temp)} C</p>
+                <p>${rain_chance} %</p>
+            </div>
+        `;
+    
+
+
+
+
+
+    }
+
+
+
+
 }
 
 async function fetchWeather(country) {
@@ -247,7 +284,7 @@ async function fetchWeather(country) {
         if (data.error) {
             displayError("Weather data not found.");
         } else {
-            displayCurrentData(data);
+            displayMainData(data);
             displayForecastData(data);
         }
     } catch (error) {

@@ -21,7 +21,7 @@ def get_weather():
 
     # Example call to the WeatherAPI (replace 'YOUR_API_KEY' with your actual key)
     currect = requests.get(f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}&aqi=yes")
-    forecast_3day = requests.get(f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&days=3")
+    forecast_3day = requests.get(f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&days=3&aqi=yes")
 
     if currect.status_code == 200 and forecast_3day.status_code == 200:
         current_data = currect.json()
