@@ -186,6 +186,29 @@ h1, h2, h3 {
     bottom: 20px; /* Spacing from the bottom */
     left: 20px; /* Equal spacing from the left */
     right: 20px; /* Equal spacing from the right */
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y:hidden;
+    scrollbar-width: none;
+}
+
+.hourlyItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 12px;
+    width: 100px;
+    height: 100%; /* Set a fixed height */
+    padding: 10px; /* Add padding for spacing inside */
+    box-sizing: border-box;
+}
+
+.hourlyItem h5,
+.hourlyItem img,
+.hourlyItem p {
+    margin: 0; /* Remove default margins for consistent spacing */
 }
 
 .hidden {

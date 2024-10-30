@@ -52,6 +52,13 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
+const hourlyContainer = document.querySelector('.hourlyContainer');
+
+hourlyContainer.addEventListener('wheel', (event) => {
+  //event.preventDefault(); 
+  hourlyContainer.scrollLeft += event.deltaY; // Scrolls horizontally
+});
+
 
 function searchP1(e) {
     e.preventDefault(); // Prevents default button behavior
@@ -94,7 +101,7 @@ function displayMainData(data, index = 0) {
     const country = data.forecast.location.country;
     const temperature = data.forecast.forecast.forecastday[index].day.avgtemp_c;
     const condition = data.forecast.forecast.forecastday[index].day.condition.text;
-    const icon = data.forecast.forecast.forecastday[index].day.condition.icon;
+    const icon = "https:" + data.forecast.forecast.forecastday[index].day.condition.icon;
     const max_wind_speed = data.forecast.forecast.forecastday[index].day.maxwind_kph;
     const humidity = data.forecast.forecast.forecastday[index].day.avghumidity;
     const uv = data.forecast.forecast.forecastday[index].day.uv;
@@ -202,7 +209,7 @@ function displayForecastData(data) {
         
         // if you want to get the whole day information replace hour by day.
         const rain = days.day.daily_chance_of_rain;
-        const image = days.day.condition.icon;
+        const image = "https:" + days.day.condition.icon;
         const desc = days.day.condition.text;
         const temp = days.day.avgtemp_c;
         const time_hour = days.date;
@@ -233,6 +240,7 @@ function displayForecastData(data) {
 
 function displayHourlyData(data, index) {
     const hourlyWeather = document.querySelector(".hourlyContainer");
+
     hourlyWeather.innerHTML = null;
     let start = 0;
     let end = 24;
@@ -245,31 +253,20 @@ function displayHourlyData(data, index) {
         const hourly = data.forecast.forecast.forecastday[index].hour[hour];
 
         const time = String(new Date(hourly.time).getHours()).padStart(2, '0') + ":00";
-        const image = hourly.condition.icon;
-        const desc = hourly.condition.text;
+        const image = "https:" + hourly.condition.icon;
+        // const desc = hourly.condition.text;
         const temp = hourly.temp_c;
         const rain_chance = hourly.chance_of_rain;
 
         hourlyWeather.innerHTML += `
-            <div>
+            <div class="hourlyItem">
                 <h5>${time}</h5>
                 <img src="${image}">
-                <p>${desc}</p>
-                <p>${Math.round(temp)} C</p>
-                <p>${rain_chance} %</p>
+                <p>${Math.round(temp)}°C</p>
+                <p style="color:lightblue;">${rain_chance}%</p>
             </div>
         `;
-    
-
-
-
-
-
     }
-
-
-
-
 }
 
 async function fetchWeather(country) {
