@@ -11,6 +11,10 @@ body {
     overflow-x: hidden;
 }
 
+.blurFilter {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 h1, h2, h3 {
     margin: 0;
 }
@@ -57,6 +61,9 @@ h1, h2, h3 {
 
 .islandTopCenter {
     flex: 80%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .removeMargin {
@@ -65,7 +72,33 @@ h1, h2, h3 {
 
 .islandBottomCenter {
     flex: 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
     transition: all 0.5s ease-out;
+}
+
+.dayDiv {
+    width: calc(33.33% - 20px); /* Divide width and leave space for margins */
+    background-color: rgba(255, 255, 255, 0.00);
+    height: 100%;
+    margin-top: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+    margin: 0 10px; /* Horizontal margin for equal spacing */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.dayDiv:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .initialPhase {
@@ -143,6 +176,18 @@ h1, h2, h3 {
     border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+.hourlyContainer {
+    width: calc(100% - 40px); /* Full width minus padding on each side */
+    background-color: rgba(255, 255, 255, 0.0);
+    height: calc(30% - 40px); /* Takes full height minus spacing */
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: absolute; /* Positions it within .islandTopCenter */
+    bottom: 20px; /* Spacing from the bottom */
+    left: 20px; /* Equal spacing from the left */
+    right: 20px; /* Equal spacing from the right */
+}
+
 .hidden {
     visibility: hidden;
 }
@@ -165,6 +210,51 @@ h1, h2, h3 {
 
 .slide-in-right {
     animation: slideInRight 1.2s ease-out forwards;
+}
+
+/* for sunny background in top left island js:144 */
+.sun {
+	width: 200px; /*variable*/
+	height: 200px; /*variable*/
+	background-color: #FFDE00;
+	border-radius: 50%;
+	box-shadow:
+		0 0 0 20px #FFDE0080,
+		0 0 0 40px #FFDE0040,
+		0 0 0 60px #FFDE0020,
+		0 0 0 80px #FFDE0010,
+		0 0 0 100px #FFDE0000,
+		0 0 40px 100px #FFDE0010;
+	animation:
+		sunrise 2s infinite linear forwards,
+		rays 2s 2s infinite linear;
+}
+
+@keyframes sunrise {
+	0% {
+		box-shadow: none;
+	}
+}
+
+@keyframes rays {
+	0% {
+		box-shadow: 
+		0 0 0 0 #FFDE0080,
+		0 0 0 20px #FFDE0080,
+		0 0 0 40px #FFDE0040,
+		0 0 0 60px #FFDE0020,
+		0 0 0 80px #FFDE0010,
+		0 0 40px 100px #FFDE0010;
+	}
+	100% {
+		box-shadow: 
+		0 0 0 20px #FFDE0080,
+		0 0 0 40px #FFDE0040,
+		0 0 0 60px #FFDE0020,
+		0 0 0 80px #FFDE0010,
+		0 0 0 100px #FFDE0000,
+		0 0 40px 100px #FFDE0010;
+	}
 }
 
 @keyframes fadeOut {

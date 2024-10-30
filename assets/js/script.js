@@ -35,7 +35,27 @@ document.querySelectorAll('.island').forEach(island => {
 
 // testing
 // Event listener for search button
+
 document.querySelector(".searchButton").addEventListener("click", function (e) {
+    searchP1(e);
+});
+
+document.addEventListener("keydown", function (e) {
+    if (document.querySelector(".islandTopCenter").classList.contains("initialPhase")) {
+        if (e.key === "Enter") {
+            searchP1(e);
+        }
+    }
+});
+
+// event listeners for day 1, 2 and 3 for islandBottomCenter - FOR KAROLIS
+document.querySelectorAll(".dayDiv").forEach(function(d) {
+    d.addEventListener("click", function() {
+        // make logic here
+    })
+})
+
+function searchP1(e) {
     e.preventDefault(); // Prevents default button behavior
 
     // Get the value of the country input
@@ -54,16 +74,21 @@ document.querySelector(".searchButton").addEventListener("click", function (e) {
         document.querySelector(".containerLeft").classList.remove("hidden");
         document.querySelector(".containerLeft").classList.add("slide-in-left");
 
+        document.querySelector(".hourlyContainer").classList.remove("none")
+        document.querySelector(".weather").classList.remove("none")
+        document.querySelector(".searchContainer").classList.add("none")
+        document.querySelector(".countryOptions").classList.add("none")
+
         // Fetch the weather data
         fetchWeather(country);
     } else {
         displayError("Please enter a country.");
     }
-});
+}
 
 // Function to display current weather data in top center
 function displayCurrentData(data) {
-    const weatherContainer = document.querySelector('.islandTopCenter');
+    const weatherContainer = document.querySelector('.weather');
     
     // Extract relevant information from data
     const location = data.current.location.name;
@@ -84,10 +109,41 @@ function displayCurrentData(data) {
     // 4 means Unhealthy
     // 5 means Very Unhealthy
     // 6 means Hazardous
+    var qualDef = ""
+
+    switch (air_qual) {
+        case 1:
+            qualDef = "Good"
+            break;
+
+        case 2:
+            qualDef = "Moderate"
+            break;
+
+        case 3:
+            qualDef = "Unhealthy for sensitive group"
+            break;
+
+        case 4:
+            qualDef = "Unhealthy"
+            break;
+
+        case 5:
+            qualDef = "Very unhealthy"
+            break;
+
+        case 6:
+            qualDef = "Hazardous"
+            break;
+    
+        default:
+            qualDef = "Unknown"
+            break;
+    }
 
 
     weatherContainer.innerHTML = `
-        <h3>Weather in ${location}, ${country}</h3>
+        <h2>Weather in ${location}, ${country}</h3>
         <p>Temperature: ${temperature}°C</p>
         <p>Feels like: ${feels_like}°C</p>
         <p>Condition: ${condition}</p>
@@ -96,9 +152,53 @@ function displayCurrentData(data) {
         <p>Humidity: ${humidity}</p>
         <p>UV: ${uv}</p>
         <p>Clouds: ${clouds}</p>
-        <p>Air Quality: ${air_qual}</p>
+        <p>Air Quality: ${qualDef}</p>
     `;
     weatherContainer.classList.remove('hidden');
+
+    // for dynamic background in top left island (to do)
+    // const initialCondition = data.current.current.condition.text.toLowerCase();
+
+    // switch (true) {
+    //     case /drizzle/.test(initialCondition): // Drizzle is more specific, so it goes first
+    //         console.log("Weather is Drizzle");
+    //         break;
+
+    //     case /sleet/.test(initialCondition):
+    //         console.log("Weather is Sleet");
+    //         break;
+
+    //     case /snow/.test(initialCondition):
+    //         console.log("Weather is Snowy");
+    //         break;
+
+    //     case /ice/.test(initialCondition):
+    //         console.log("Weather has Ice");
+    //         break;
+
+    //     case /rain|shower/.test(initialCondition): // Rain includes showers but avoids drizzle
+    //         console.log("Weather is Rainy");
+    //         break;
+
+    //     case /thunder/.test(initialCondition):
+    //         console.log("Weather is Thunderstorm");
+    //         break;
+
+    //     case /mist|fog/.test(initialCondition):
+    //         console.log("Weather is Foggy");
+    //         break;
+
+    //     case /sunny|clear|overcast/.test(initialCondition):
+    //         console.log("Weather is Sunny");
+    //         break;
+
+    //     case /cloudy/.test(initialCondition): // Cloudy goes last to avoid partial matches with "partly cloudy"
+    //         console.log("Weather is Cloudy");
+    //         break;
+
+    //     default:
+    //         console.log("Weather condition is not recognized");
+    // }
 }
 
 // Function to display current weather data in top center
@@ -156,8 +256,7 @@ async function fetchWeather(country) {
 }
 // Function to display error messages
 function displayError(message) {
-    const weatherContainer = document.querySelector('.islandBottomCenter');
-    weatherContainer.innerHTML = `<p class="error">${message}</p>`;
-    weatherContainer.classList.remove('hidden');
+    // replaced additional element creation (put error in console devtools)
+    console.log(message)
 }
 

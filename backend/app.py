@@ -6,7 +6,7 @@ from flask_cors import CORS  # Import CORS
 
 
 load_dotenv()  # Load environment variables from .env file 
-api_key = "a908fb2eee8b48f6bd190405242910" #temp. Put it into env
+api_key = os.getenv('API_KEY')
 city = "Antwerp"
 
 app = Flask(__name__)
