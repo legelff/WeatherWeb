@@ -154,6 +154,7 @@ function displayMainData(data, index = 0) {
     `;
     weatherContainer.classList.remove('hidden');
     displayHourlyData(data, index);
+    DisplayAstronomy(data, index);
 
     // for dynamic background in top left island (to do)
     // const initialCondition = data.current.current.condition.text.toLowerCase();
@@ -267,6 +268,33 @@ function displayHourlyData(data, index) {
             </div>
         `;
     }
+}
+
+function DisplayAstronomy(data, index) {
+
+    const astronomyWeather = document.querySelector(".islandBottomRight");
+    
+    const astronomy = data.forecast.forecast.forecastday[index].astro;
+    
+    const moon_phase = astronomy.moon_phase;
+    const moonrise = astronomy.moonrise;
+    const moonset = astronomy.moonset;
+    const sunrise = astronomy.sunrise;
+    const sunset = astronomy.sunset;
+    // Would be cool to put some icons/animations, so it would be cool to look at the phase and when moonrise/moonset etc.
+    // Also can you check how easier convert am/pm time to 24 hour scale?
+    
+    astronomyWeather.innerHTML = `
+        <div>
+            <h5>Moon phase: ${moon_phase}</h5>
+            <p>moon rise: ${moonrise}</p>
+            <p>moon set: ${moonset}</p>
+            <p>sunrise: ${sunrise}</p>
+            <p>sunset: ${sunset}</p>
+        </div>
+    `;
+
+
 }
 
 async function fetchWeather(country) {
