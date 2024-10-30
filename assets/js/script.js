@@ -59,6 +59,19 @@ hourlyContainer.addEventListener('wheel', (event) => {
   hourlyContainer.scrollLeft += event.deltaY; // Scrolls horizontally
 });
 
+// ip lookup eventlistener auto location
+document.querySelector(".autoLocation").addEventListener("click", function() {
+    fetch("https://api.ipify.org?format=json")
+        .then(response => response.json())
+        .then(data => {
+            alert("Your IP address is: " + data.ip); // replace this with logic to pass to weatherapi
+        })
+        .catch(error => {
+            console.error("Error fetching IP:", error);
+            alert("Failed to retrieve IP address.");
+        });
+})
+
 
 function searchP1(e) {
     e.preventDefault(); // Prevents default button behavior
