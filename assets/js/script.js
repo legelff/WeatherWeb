@@ -61,15 +61,8 @@ hourlyContainer.addEventListener('wheel', (event) => {
 
 // ip lookup eventlistener auto location
 document.querySelector(".autoLocation").addEventListener("click", function() {
-    fetch("https://api.ipify.org?format=json")
-        .then(response => response.json())
-        .then(data => {
-            alert("Your IP address is: " + data.ip); // replace this with logic to pass to weatherapi
-        })
-        .catch(error => {
-            console.error("Error fetching IP:", error);
-            alert("Failed to retrieve IP address.");
-        });
+    fetchIp();
+    animate()
 })
 
 
@@ -77,32 +70,38 @@ function searchP1(e) {
     e.preventDefault(); // Prevents default button behavior
 
     // Get the value of the country input
-    const country = document.querySelector("#country").value.trim();
+    const location = document.querySelector("#country").value.trim();
 
-    if (country) {
+    if (location) {
         // Trigger animations
-        document.querySelector(".islandTopCenter").classList.remove("initialPhase");
-        document.querySelector(".islandTopCenter").classList.add("removeMargin");
-        document.querySelector(".islandBottomCenter").classList.remove("initialPhaseBottom", "hidden");
-        document.querySelector(".islandBottomCenter").classList.add("fade-in");
-        document.querySelector(".searchContainer").classList.add("fade-out");
-        document.querySelector(".countryOptions").classList.add("fade-out");
-        document.querySelector(".containerRight").classList.remove("hidden");
-        document.querySelector(".containerRight").classList.add("slide-in-right");
-        document.querySelector(".containerLeft").classList.remove("hidden");
-        document.querySelector(".containerLeft").classList.add("slide-in-left");
-
-        document.querySelector(".hourlyContainer").classList.remove("none")
-        document.querySelector(".weather").classList.remove("none")
-        document.querySelector(".searchContainer").classList.add("none")
-        document.querySelector(".countryOptions").classList.add("none")
+        animate(location);
 
         // Fetch the weather data
-        fetchWeather(country);
+        fetchWeather(location);
     } else {
         displayError("Please enter a country.");
     }
 }
+// To animate blocks
+function animate(location) {
+    // Trigger animations
+    document.querySelector(".islandTopCenter").classList.remove("initialPhase");
+    document.querySelector(".islandTopCenter").classList.add("removeMargin");
+    document.querySelector(".islandBottomCenter").classList.remove("initialPhaseBottom", "hidden");
+    document.querySelector(".islandBottomCenter").classList.add("fade-in");
+    document.querySelector(".searchContainer").classList.add("fade-out");
+    document.querySelector(".countryOptions").classList.add("fade-out");
+    document.querySelector(".containerRight").classList.remove("hidden");
+    document.querySelector(".containerRight").classList.add("slide-in-right");
+    document.querySelector(".containerLeft").classList.remove("hidden");
+    document.querySelector(".containerLeft").classList.add("slide-in-left");
+
+    document.querySelector(".hourlyContainer").classList.remove("none")
+    document.querySelector(".weather").classList.remove("none")
+    document.querySelector(".searchContainer").classList.add("none")
+    document.querySelector(".countryOptions").classList.add("none")
+}
+
 
 // Function to display current weather data in top center
 function displayMainData(data, index = 0) {
@@ -158,7 +157,7 @@ function displayMainData(data, index = 0) {
             qualDef = "Unknown"
             break;
     }
-
+    
     weatherContainer.innerHTML = `
         <h2>${formattedDate} Weather in ${location}, ${country}</h3>
         <img src="${icon}">
@@ -173,7 +172,7 @@ function displayMainData(data, index = 0) {
     `;
     weatherContainer.classList.remove('hidden');
     displayHourlyData(data, index);
-    DisplayAstronomy(data, index);
+    displayAstronomy(data, index);
 
     // for dynamic background in top left island (to do)
     // const initialCondition = data.current.current.condition.text.toLowerCase();
@@ -240,7 +239,8 @@ function displayForecastData(data) {
         const image = "https:" + days.day.condition.icon;
         const desc = days.day.condition.text;
         const temp = days.day.avgtemp_c;
-    
+        
+        
         weatherContainer.innerHTML += `
             <div class="dayDiv d${day}">
                 <h4>${time_hour}</h4>
@@ -275,20 +275,17 @@ function displayForecastData(data) {
 
 function displayHourlyData(data, index) {
     const hourlyWeather = document.querySelector(".hourlyContainer");
-
+    
     hourlyWeather.innerHTML = null;
     let start = 0;
     let end = 24;
-    // For current data and not display hour that is passed
     if(index == 0) {
-        // const now = new Date();
-        // start = now.getHours();
-        let localtime = data.forecast.location.localtime
-        start = localtime.split(" ")[1].split(":")[0];
+        const now = new Date();
+        start = now.getHours(); // it takes browser time and it local time for user
     }
     for (var hour = start; hour < end; hour++) {
         const hourly = data.forecast.forecast.forecastday[index].hour[hour];
-
+        
         let time = String(new Date(hourly.time).getHours()).padStart(2, '0') + ":00";
 
         if (hour == start && time != "00:00") {
@@ -311,7 +308,7 @@ function displayHourlyData(data, index) {
     }
 }
 
-function DisplayAstronomy(data, index) {
+function displayAstronomy(data, index) {
 
     const astronomyWeather = document.querySelector(".astronomyContainer");
     
@@ -338,10 +335,22 @@ function DisplayAstronomy(data, index) {
 
 }
 
-async function fetchWeather(country) {
+function displayTime(data) {
+    const DateTime = document.querySelector(".islandTopLeft")
+    
+    // let localtime = data.forecast.location.localtime; this gets when was the last time weather was updated, not accurate
+    const localtime = new Date() // it detects your local time, UTC and etc. so take what you need from here, cause
+    // you have all the time you need.
+
+    DateTime.innerHTML = `
+        <h4>Local time: ${localtime}</h4>
+    `
+}
+
+async function fetchWeather(location) {
     try {
         // Send a request to the backend API with the country as a parameter
-        const response = await fetch(`http://127.0.0.1:5000/api/weather?city=${country}`);
+        const response = await fetch(`http://127.0.0.1:5000/api/weather?city=${location}`);
 
         // Parse the response as JSON
         const data = await response.json();
@@ -352,10 +361,30 @@ async function fetchWeather(country) {
         } else {
             displayMainData(data);
             displayForecastData(data);
+            displayTime(data);
         }
     } catch (error) {
         displayError("An error occurred."); // Adds box below, you have to display it somewhere else @Aryan
     }
+}
+// retrieve user location and use lat and long for location
+async function fetchIp() {
+    try {
+        // Fetch the location data from the API
+        const response = await fetch("http://127.0.0.1:5000/api/ip");
+        
+        // Check if the response is okay (status 200)
+        if (!response.ok) throw new Error("Failed to fetch location data.");
+
+        // Parse the JSON from the response
+        const locationData = await response.json();
+
+        fetchWeather(`${locationData.lat},${locationData.lon}`)
+            
+    } catch (error) {
+        console.error("Error fetching location data:", error);
+    }
+
 }
 // Function to display error messages
 function displayError(message) {

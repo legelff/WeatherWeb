@@ -20,21 +20,37 @@ def get_weather():
         return jsonify({"error": "City not provided"}), 400
 
     # Example call to the WeatherAPI (replace 'YOUR_API_KEY' with your actual key)
-    ip_lookup = requests.get(f"http://api.weatherapi.com/v1/ip.json?key={api_key}&q=100.0.0.1") # Needs check if this is possible
     forecast_3day = requests.get(f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&days=3&aqi=yes")
 
-    if ip_lookup.status_code == 200 and forecast_3day.status_code == 200:
-        ip_data = ip_lookup.json()
+    if forecast_3day.status_code == 200:
         forecast_data = forecast_3day.json()
         # Combine the data into a single response object
         combined_data = {
-            "ip_lookup": ip_data,
             "forecast": forecast_data
         }
         
         return jsonify(combined_data)
     else:
         return jsonify({"error": "Weather data not found"}), 404
+    
+    
+# ip_lookup = requests.get(f"http://api.weatherapi.com/v1/ip.json?key={api_key}&q=1auto:ip") # Needs check if this is possible
+@app.route('/api/ip', methods=['GET'])
+def get_location_by_ip():
+    ip_lookup = requests.get(f"http://api.weatherapi.com/v1/ip.json?key={api_key}&q=auto:ip")
+
+    if ip_lookup.status_code == 200:
+        location_data = ip_lookup.json()
+        return jsonify(location_data)
+    else:
+        return jsonify({"error": "Could not retrieve location from IP"}) 
+
+
+
+    
+        
+    
+    
     
 
 if __name__ == "__main__":
