@@ -268,12 +268,14 @@ function displayForecastData(data) {
                 const hourlyItems = document.querySelectorAll('.hourlyItem');
                 const hourlyContainer = document.querySelector('.hourlyContainer');
                 
-                hourlyItems.forEach(item => {
-                    const timeText = item.querySelector('h5').textContent.trim();
-                    if (timeText == "07:00") {
-                        hourlyContainer.scrollLeft = item.offsetLeft;
-                    }
-                });
+                setTimeout(() => {
+                    hourlyItems.forEach(item => {
+                        const timeText = item.querySelector('h5').textContent.trim();
+                        if (timeText == "07:00") {
+                            hourlyContainer.scrollLeft = item.offsetLeft;
+                        }
+                    });
+                }, 20); // added delay to avoid buggy scroll
             }
         });
     });
@@ -318,7 +320,7 @@ function displayHourlyData(data, index) {
 
 function displayAstronomy(data, index) {
 
-    const astronomyWeather = document.querySelector(".astronomyContainer");
+    const moonPlace = document.querySelector(".moonImage");
     
     const astronomy = data.forecast.forecast.forecastday[index].astro;
     
@@ -327,20 +329,42 @@ function displayAstronomy(data, index) {
     const moonset = astronomy.moonset;
     const sunrise = astronomy.sunrise;
     const sunset = astronomy.sunset;
-    // Would be cool to put some icons/animations, so it would be cool to look at the phase and when moonrise/moonset etc.
-    // Also can you check how easier convert am/pm time to 24 hour scale?
     
-    // astronomyWeather.innerHTML = `
-    //     <div>
-    //         <h5>Moon phase: ${moon_phase}</h5>
-    //         <p>moon rise: ${moonrise}</p>
-    //         <p>moon set: ${moonset}</p>
-    //         <p>sunrise: ${sunrise}</p>
-    //         <p>sunset: ${sunset}</p>
-    //     </div>
-    // `;
+    moonPlace.innerHTML = `
+        <img src="./assets/img/${moon_phase.replace(/ /g, '').toLowerCase()}.png" alt="${moon_phase.replace(/ /g, '').toLowerCase()}" class="moonPhase">
+    `;
 
+    document.querySelector(".sunrise h2").innerHTML = `
+        ${to24HourFormat(sunrise)}
+    `
 
+    document.querySelector(".sunset h2").innerHTML = `
+        ${to24HourFormat(sunset)}
+    `
+
+    document.querySelector(".moonrise h2").innerHTML = `
+        ${to24HourFormat(moonrise)}
+    `
+
+    document.querySelector(".moonset h2").innerHTML = `
+        ${to24HourFormat(moonset)}
+    `
+
+    document.querySelector(".moonPhaseData h2").innerHTML = `
+        ${moon_phase}
+    `
+}
+
+// convert ex. 05:26 PM to 24h format
+function to24HourFormat(time) {
+    const [hours, minutes] = time.split(/[: ]/);
+    const period = time.slice(-2);
+    
+    let hour = parseInt(hours);
+    if (period === "PM" && hour !== 12) hour += 12;
+    if (period === "AM" && hour === 12) hour = 0;
+    
+    return `${String(hour).padStart(2, '0')}:${minutes}`;
 }
 
 function displayTime(data) {
@@ -399,4 +423,3 @@ function displayError(message) {
     // replaced additional element creation (put error in console devtools)
     console.log(message)
 }
-
