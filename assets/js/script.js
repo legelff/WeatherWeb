@@ -330,15 +330,15 @@ function displayAstronomy(data, index) {
     // Would be cool to put some icons/animations, so it would be cool to look at the phase and when moonrise/moonset etc.
     // Also can you check how easier convert am/pm time to 24 hour scale?
     
-    astronomyWeather.innerHTML = `
-        <div>
-            <h5>Moon phase: ${moon_phase}</h5>
-            <p>moon rise: ${moonrise}</p>
-            <p>moon set: ${moonset}</p>
-            <p>sunrise: ${sunrise}</p>
-            <p>sunset: ${sunset}</p>
-        </div>
-    `;
+    // astronomyWeather.innerHTML = `
+    //     <div>
+    //         <h5>Moon phase: ${moon_phase}</h5>
+    //         <p>moon rise: ${moonrise}</p>
+    //         <p>moon set: ${moonset}</p>
+    //         <p>sunrise: ${sunrise}</p>
+    //         <p>sunset: ${sunset}</p>
+    //     </div>
+    // `;
 
 
 }
