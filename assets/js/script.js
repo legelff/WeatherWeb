@@ -379,28 +379,36 @@ function displayTime(data) {
 // display historical data. 6 days from yesterday
 function displayHistoricalData(data) {
 
-    const historical = document.querySelector(".islandTopRight");
+    const historical = document.querySelector(".historicalContainer");
     const history_data = data.history.forecast.forecastday;
     for(let day = 5; day >= 0; day--) {
         const history_day = history_data[day];
-        const date = history_day.date;
-        const icon = history_day.day.condition.icon; // I dont if https needed here, have a look
+        const icon = "https:" + history_day.day.condition.icon;
         // test data
-        const avg_temp = history_day.day.avgtemp_c;
+        const avg_temp = Math.round(history_day.day.avgtemp_c);
         const min_temp = history_day.day.mintemp_c;
         const max_temp = history_day.day.maxtemp_c;
         const change_of_rain = history_day.day.daily_chance_of_rain;
         const uv = history_day.day.uv;
 
+        let date = new Date(history_day.date);
+        let formattedDate = new Intl.DateTimeFormat('en-US', {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric'
+        }).format(date);
+
+        if (day == 5) {
+            formattedDate = "Yesterday";
+        }
+
         historical.innerHTML += `
-            <div>
-                <h5>${date}</h5>
-                <img src="${icon}">
-                <p>Average ${avg_temp} C</p>
-                <p>min ${min_temp} C</p>
-                <p>max ${max_temp}</p>
-                <p>rain chance ${change_of_rain}</p>
-                <p>uv ${uv}</p>
+            <div class="historicalItem">
+                <h4>${formattedDate}</h4>
+                <img src="${icon}" class="historicalImage">
+                <div class="historicalDetails">
+                    <p>${avg_temp}°C <span style="color:lightblue; opacity:0.7;">/ ${change_of_rain}%</span></p>
+                </div
             </div>
         `
     }
