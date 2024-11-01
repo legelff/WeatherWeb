@@ -290,8 +290,7 @@ function displayHourlyData(data, index) {
     let start = 0;
     let end = 24;
     if(index == 0) {
-        const now = new Date();
-        start = now.getHours(); // it takes browser time and it local time for user
+        start = new Date(data.forecast.location.localtime).getHours();
     }
     for (var hour = start; hour < end; hour++) {
         const hourly = data.forecast.forecast.forecastday[index].hour[hour];
@@ -368,22 +367,55 @@ function to24HourFormat(time) {
 }
 
 function displayTime(data) {
-    const DateTime = document.querySelector(".islandTopLeft")
+    const DateTime = document.querySelector(".islandTopLeft");
     
     // let localtime = data.forecast.location.localtime; this gets when was the last time weather was updated, not accurate
-    const localtime = new Date() // it detects your local time, UTC and etc. so take what you need from here, cause
-    // you have all the time you need.
+    const localtime = new Date(data.forecast.location.localtime);
 
     DateTime.innerHTML = `
         <h4>Local time: ${localtime}</h4>
     `
 }
+// display historical data. 6 days from yesterday
+function displayHistoricalData(data) {
+
+    const historical = document.querySelector(".islandTopRight");
+    const history_data = data.history.forecast.forecastday;
+    for(let day = 5; day >= 0; day--) {
+        const history_day = history_data[day];
+        const date = history_day.date;
+        const icon = history_day.day.condition.icon; // I dont if https needed here, have a look
+        // test data
+        const avg_temp = history_day.day.avgtemp_c;
+        const min_temp = history_day.day.mintemp_c;
+        const max_temp = history_day.day.maxtemp_c;
+        const change_of_rain = history_day.day.daily_chance_of_rain;
+        const uv = history_day.day.uv;
+
+        historical.innerHTML += `
+            <div>
+                <h5>${date}</h5>
+                <img src="${icon}">
+                <p>Average ${avg_temp} C</p>
+                <p>min ${min_temp} C</p>
+                <p>max ${max_temp}</p>
+                <p>rain chance ${change_of_rain}</p>
+                <p>uv ${uv}</p>
+            </div>
+        `
+    }
+
+
+
+
+
+}
 
 async function fetchWeather(location) {
     try {
-        // Send a request to the backend API with the country as a parameter
+        // Send a request to the backend API with the country as a parameter 
         const response = await fetch(`http://127.0.0.1:5000/api/weather?city=${location}`);
-
+        
         // Parse the response as JSON
         const data = await response.json();
         console.log("Weather Data:", data);
@@ -394,6 +426,7 @@ async function fetchWeather(location) {
             displayMainData(data);
             displayForecastData(data);
             displayTime(data);
+            displayHistoricalData(data);
         }
     } catch (error) {
         displayError("An error occurred."); // Adds box below, you have to display it somewhere else @Aryan
