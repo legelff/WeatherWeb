@@ -39,7 +39,6 @@ def get_weather():
     else:
         return jsonify({"error": "Weather data not found"}), 404
     
-    
 @app.route('/api/ip', methods=['GET'])
 def get_location_by_ip():
     ip_lookup = requests.get(f"http://api.weatherapi.com/v1/ip.json?key={api_key_weather}&q=auto:ip")
