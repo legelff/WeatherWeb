@@ -419,14 +419,40 @@ function displayHistoricalData(data) {
 
 }
 
+function displayImages(images) {
+
+    const image_div = document.querySelector(".islandBottomLeft");
+
+    const images_data = images.photos;
+
+    for(let image = 0; image < 5; image++) {
+
+        const url = images_data[image].src.original;
+        const alt = images_data[image].alt;
+
+        image_div.innerHTML += `
+            <div>
+                <img src="${url}" alt="${alt}" style="width: 200px; height: 100px;">
+            </div>
+        `
+    }
+}
+
+
+
 async function fetchWeather(location) {
     try {
         // Send a request to the backend API with the country as a parameter 
-        const response = await fetch(`http://127.0.0.1:5000/api/weather?city=${location}`);
+        const forecast_data = await fetch(`http://127.0.0.1:5000/api/weather?location=${location}`);
         
         // Parse the response as JSON
-        const data = await response.json();
-        console.log("Weather Data:", data);
+        const data = await forecast_data.json();
+        
+        const pexel_images = await fetch(`http://127.0.0.1:5000/api/images?location=${data.forecast.location.country}`);
+        const images = await pexel_images.json();
+
+        console.log("Weather Data:", data); // remove them after testing is over
+        console.log("Image data:", images); // remove them after testing is over
 
         if (data.error) {
             displayError("Weather data not found.");
@@ -435,6 +461,7 @@ async function fetchWeather(location) {
             displayForecastData(data);
             displayTime(data);
             displayHistoricalData(data);
+            displayImages(images);
         }
     } catch (error) {
         displayError("An error occurred."); // Adds box below, you have to display it somewhere else @Aryan
