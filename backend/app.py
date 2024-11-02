@@ -18,7 +18,7 @@ CORS(app)  # Enable CORS for all routes
 def get_weather():
     location = request.args.get('location')
     if not location:
-        return jsonify({"error": "City not provided"}), 400
+        return jsonify({"error": "Location not provided"}), 400
 
     # Example call to the WeatherAPI (replace 'YOUR_API_KEY' with your actual key)
     forecast_3day = requests.get(f"http://api.weatherapi.com/v1/forecast.json?key={api_key_weather}&q={location}&days=3&aqi=yes")
@@ -49,6 +49,22 @@ def get_location_by_ip():
     else:
         return jsonify({"error": "Could not retrieve location from IP"}) 
 
+@app.route('/api/search', methods=['GET'])
+def get_location():
+    location = request.args.get('location')
+    if not location:
+        return jsonify({"error": "Location not provided"}), 400
+    
+    # Request location search from WeatherAPI
+    locations = requests.get(f"http://api.weatherapi.com/v1/search.json?key={api_key_weather}&q={location}")
+
+    if locations.status_code == 200:
+        location_data = locations.json()
+        return jsonify(location_data)
+    else:
+        return jsonify({"error": "Could not retrieve locations"}), 500
+
+
 # For images
 @app.route('/api/images', methods=['GET'])
 def get_images():
@@ -72,6 +88,10 @@ def get_images():
         return jsonify(images_data)  # Return the image data as JSON
     else:
         return jsonify({"error": "Could not retrieve images from Pexels"}), 500
+
+
+
+
 
     
 if __name__ == "__main__":

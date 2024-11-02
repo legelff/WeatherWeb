@@ -1,5 +1,5 @@
-let forecast_days = [];
-var data = {};
+// let forecast_days = [];
+// var data = {};
 
 
 document.querySelectorAll('.island').forEach(island => {
@@ -73,11 +73,9 @@ function searchP1(e) {
     const location = document.querySelector("#country").value.trim();
 
     if (location) {
-        // Trigger animations
-        animate(location);
-
-        // Fetch the weather data
-        fetchWeather(location);
+        fetchLocations(location);
+        
+        
     } else {
         displayError("Please enter a country.");
     }
@@ -102,7 +100,6 @@ function animate(location) {
     document.querySelector(".countryOptions").classList.add("none")
 }
 
-
 // Function to display current weather data in top center
 function displayMainData(data, index = 0) {
     const weatherContainer = document.querySelector('.weather');
@@ -117,6 +114,7 @@ function displayMainData(data, index = 0) {
     // Extract relevant information from data
     const location = data.forecast.location.name;
     const country = data.forecast.location.country;
+    const region = data.forecast.location.region;
     const temperature = data.forecast.forecast.forecastday[index].day.avgtemp_c;
     const condition = data.forecast.forecast.forecastday[index].day.condition.text;
     const icon = "https:" + data.forecast.forecast.forecastday[index].day.condition.icon;
@@ -159,7 +157,7 @@ function displayMainData(data, index = 0) {
     }
     
     weatherContainer.innerHTML = `
-        <h2>${formattedDate} Weather in ${location}, ${country}</h3>
+        <h2>${formattedDate} Weather in ${location}, ${region ? region + "," : ""} ${country}</h3>
         <img src="${icon}">
         <p>Temperature: ${temperature}°C</p>
         <p>Condition: ${condition}</p>
@@ -514,7 +512,64 @@ function displayImages(images) {
     }
 }
 
+function displayLocations(locations) {
 
+
+    if(locations.length == 1) {
+        const lat_long = `${locations[0].lat},${locations[0].lon}`
+        // Trigger animations
+        animate(lat_long);
+        // Fetch the weather data
+        fetchWeather(lat_long);
+    }
+    else {
+        country_selector = document.querySelector(".countryOptions");
+        
+        for(let country = 0; country < locations.length; country++) {
+
+            const country_name = locations[country].country;
+            const lat = locations[country].lat;
+            const long = locations[country].lon;
+            const name = locations[country].name;
+            const region = locations[country].region;
+
+            country_selector.innerHTML += `
+                <div class="dataCell" data-loc="${lat},${long}">
+                    <p>${name}, ${region ? region + "," : ""} ${country_name}</p>
+                </div>
+            `
+        }
+        console.log(1);
+        
+        document.querySelectorAll(".dataCell").forEach(function(cell) {
+            cell.addEventListener("click", function() {
+
+                const lat_long = cell.getAttribute("data-loc");
+                animate(lat_long);
+                fetchWeather(lat_long);
+            });
+        });
+
+    }
+
+} 
+
+async function fetchLocations(location) {
+
+    try {
+        
+        const location_data = await fetch(`http://127.0.0.1:5000/api/search?location=${location}`);
+        const loc = await location_data.json();
+        console.log(loc);
+        displayLocations(loc);
+        
+    }
+    catch (error) {
+        displayError("An error occurred."); 
+    }
+
+
+}
 
 async function fetchWeather(location) {
     try {
