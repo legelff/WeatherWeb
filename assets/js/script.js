@@ -1,6 +1,14 @@
 // let forecast_days = [];
 // var data = {};
 
+// // credit links (customizsable)
+// document.querySelector(".github").addEventListener("click", function() {
+//     window.open("https://github.com/legelff/WeatherWeb", "_blank");
+// })
+
+// document.querySelector(".website").addEventListener("click", function() {
+//     window.open("https://l145.be/", "_blank");
+// })
 
 document.querySelectorAll('.island').forEach(island => {
     island.addEventListener('mousemove', (e) => {
@@ -430,6 +438,32 @@ function displayTime(data) {
             Good Night ${location}, ${country}!
         `
     }
+
+    // display day, date
+    const options = { weekday: 'long' }; // 'long' for full day name, 'short' for abbreviated
+    const dayName = localtime.toLocaleDateString('en-US', options);
+
+    // Get day, month, and year
+    const day = String(localtime.getDate()).padStart(2, '0'); // Get day and pad with zero if needed
+    const month = String(localtime.getMonth() + 1).padStart(2, '0'); // getMonth() returns month from 0-11, so add 1
+    const year = localtime.getFullYear(); // Get full year
+
+    const timezoneName = localtime.toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ').pop(); // Gets the last part of the string which is the timezone
+
+    // Format the date as dd/mm/yyyy
+    const formattedDate = `${day}/${month}/${year}`;
+
+    document.querySelector(".day").innerHTML = `
+        ${dayName}
+    `
+
+    document.querySelector(".date").innerHTML = `
+        ${formattedDate}
+    `
+
+    document.querySelector(".timezone").innerHTML = `
+        ${timezoneName}
+    `
 }
 
 function updateClockHands(localtime, hr, min, sec, deg) {
@@ -494,27 +528,68 @@ function displayHistoricalData(data) {
 }
 
 function displayImages(images) {
-
-    const image_div = document.querySelector(".islandBottomLeft");
-
+    const image_div = document.querySelector(".images");
     const images_data = images.photos;
 
-    for(let image = 0; image < 5; image++) {
+    // Create a loading counter
+    let imagesLoaded = 0;
 
-        const url = images_data[image].src.original;
-        const alt = images_data[image].alt;
+    // Function to load and display an image
+    const loadImage = (index) => {
+        if (index >= images_data.length) return; // Stop if all images are loaded
 
-        image_div.innerHTML += `
-            <div>
-                <img src="${url}" alt="${alt}" style="width: 200px; height: 100px;">
-            </div>
-        `
-    }
+        const url = images_data[index].src.original;
+        const alt = images_data[index].alt;
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = alt;
+        img.classList.add('loopImage', 'hidden'); // Initially hidden
+
+        // Set the load event
+        img.onload = () => {
+            imagesLoaded++; // Increment the counter when an image loads
+            // Start the slideshow if all images have loaded
+            if (imagesLoaded === images_data.length) {
+                // Remove hidden class and start slideshow
+                document.querySelectorAll('.loopImage').forEach(image => {
+                    image.classList.remove('hidden');
+                });
+
+                startSlideshow(document.querySelectorAll('.loopImage'));
+            }
+        };
+
+        // Append the image to the container
+        image_div.appendChild(img);
+
+        // Load the next image after a delay
+        setTimeout(() => loadImage(index + 1), 1000); // Delay of 1 second
+    };
+
+    // Start loading images
+    loadImage(0); // Start with the first image
+}
+
+function startSlideshow(images) {
+    let current = 0;
+
+    // Initialize first image as active
+    images[current].classList.add('active');
+
+    setInterval(() => {
+        // Remove active class from the current image
+        images[current].classList.remove('active');
+
+        // Move to the next image, looping back to start if necessary
+        current = (current + 1) % images.length;
+
+        // Add active class to the new current image
+        images[current].classList.add('active');
+    }, 3000); // Change every 3 seconds
 }
 
 function displayLocations(locations) {
-
-
     if(locations.length == 1) {
         const lat_long = `${locations[0].lat},${locations[0].lon}`
         // Trigger animations

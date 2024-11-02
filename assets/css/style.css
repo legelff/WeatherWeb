@@ -136,6 +136,79 @@ h1, h2, h3 {
     z-index: -1;
 }
 
+.islandBottomLeft {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+}
+
+.images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+}
+
+.islandBottomLeft p {
+    margin: 0;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 999;
+}
+
+a {
+    position: relative; 
+    color: rgba(255, 255, 255, 0.5); 
+    text-decoration: none; 
+}
+
+a::after {
+    content: ''; 
+    position: absolute; 
+    left: 0; 
+    bottom: 0; 
+    width: 100%; 
+    height: 0.5px; 
+    background-color: rgba(255, 255, 255, 0.5); 
+    transform: scaleX(0); 
+    transition: transform 0.3s ease; 
+}
+
+a:hover::after {
+    transform: scaleX(1);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+a:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.loopImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.loopImage.active {
+    opacity: 1;
+    z-index: 1;
+}
+
 .islandTopLeft {
     padding: 20px;
     display: flex;
@@ -169,7 +242,7 @@ h1, h2, h3 {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 15px;
+    /* padding-bottom: 15px; */
 }
 
 .Clock {
@@ -256,31 +329,70 @@ h1, h2, h3 {
     border-radius: 6px 6px 0 0;
 }
 
-.digital {
+.digitalContainer, .dayContainer, .dateContainer, .creditsContainer, .timezoneContainer {
     height: 33.333%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
-    font-size: 30px;
-    font-weight: bolder;
+    position: relative;
+    /* border: 2px solid yellow; */
+}
+
+.creditsItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding-left: 5px;
+}
+
+.linkItem {
     border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 3px;
+    width: 50px;
+    height: 50px;
     border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
 }
 
-.day {
-    background-color: purple;
-    height: 33.33%;
+.linkItem i {
+    font-size: 24px;
+    transition: all 0.5s ease-in-out;
 }
 
-.date {
-    background-color: greenyellow;
-    height: 33.33%;
+.linkItem:hover i {
+    font-size: 50px;
 }
 
-.credits {
-    background-color: gray;
-    height: 33.33%;
+.digitalItem, .dayItem, .dateItem, .timezoneItem {
+    width: 100%;
+    padding-left: 30px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.digitalItem {
+    padding: 0;
+    width: auto;
+}
+
+.digitalItem p, .digitalItem h2, .dayItem p, .dayItem h2, .dateItem p, .dateItem h2, .creditsItem p, .creditsItem h2, .timezoneItem p, .timezoneItem h2 {
+    margin: 0;
+}
+
+.digitalItem p, .dayItem p, .dateItem p, .timezoneItem p {
+    font-size: 12px;
+}
+
+.digitalItem h2, .timezoneItem h2 {
+    font-size: xx-large;
+}
+
+.dayItem h2, .dateItem h2 {
+    font-size: x-large;
 }
 
 .islandTopCenter {
