@@ -1,14 +1,14 @@
 // let forecast_days = [];
 // var data = {};
 
-// // credit links (customizsable)
-// document.querySelector(".github").addEventListener("click", function() {
-//     window.open("https://github.com/legelff/WeatherWeb", "_blank");
-// })
+// credit links (customizsable)
+document.querySelector(".github").addEventListener("click", function() {
+    window.open("https://github.com/legelff/WeatherWeb", "_blank");
+})
 
-// document.querySelector(".website").addEventListener("click", function() {
-//     window.open("https://l145.be/", "_blank");
-// })
+document.querySelector(".website").addEventListener("click", function() {
+    window.open("https://l145.be/", "_blank");
+})
 
 document.querySelectorAll('.island').forEach(island => {
     island.addEventListener('mousemove', (e) => {
@@ -45,7 +45,6 @@ document.querySelectorAll('.island').forEach(island => {
     });
 });
 
-// testing
 // Event listener for search button
 
 document.querySelector(".searchButton").addEventListener("click", function (e) {
@@ -59,6 +58,37 @@ document.addEventListener("keydown", function (e) {
         }
     }
 });
+
+// back button 
+document.querySelector(".home").addEventListener("click", function() {
+    location.reload()
+})
+
+// home button transparancy
+const homeElement = document.querySelector(".home");
+
+let hideTimeout;
+
+// Function to set opacity to 0.1 after 10 seconds
+const startHideTimer = () => {
+    hideTimeout = setTimeout(() => {
+        homeElement.style.opacity = "0.1";
+    }, 10000); // 10 seconds
+};
+
+// Function to reset opacity when hovered
+const resetOpacity = () => {
+    clearTimeout(hideTimeout); // Clear the previous timer
+    homeElement.style.opacity = "1"; // Set opacity to full
+    startHideTimer(); // Restart the timer
+};
+
+// Add event listeners
+homeElement.addEventListener("mouseenter", resetOpacity);
+homeElement.addEventListener("mouseleave", startHideTimer);
+
+// Start the timer initially
+startHideTimer();
 
 const hourlyContainer = document.querySelector('.hourlyContainer');
 
@@ -85,9 +115,19 @@ function searchP1(e) {
         
         
     } else {
-        displayError("Please enter a country.");
+        // displayError("Please enter a country.");
+        country_selector = document.querySelector(".countryOptions");
+        country_selector.innerHTML = `
+                <div class="dataCell">
+                    <p>No location found!</p>
+                </div>
+                <div class="dataCell">
+                    <p>Type in a location silly</p>
+                </div>
+            `
     }
 }
+
 // To animate blocks
 function animate(location) {
     // Trigger animations
@@ -590,6 +630,19 @@ function startSlideshow(images) {
 }
 
 function displayLocations(locations) {
+    if (locations.length === 0) {
+        country_selector = document.querySelector(".countryOptions");
+        country_selector.innerHTML = `
+                <div class="dataCell">
+                    <p>No location found!</p>
+                </div>
+                <div class="dataCell">
+                    <p>Typo perahps?</p>
+                </div>
+            `
+        return; // Exit the function if no locations
+    }
+
     if(locations.length == 1) {
         const lat_long = `${locations[0].lat},${locations[0].lon}`
         // Trigger animations

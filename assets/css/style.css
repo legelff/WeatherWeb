@@ -217,7 +217,7 @@ a:hover {
 }
 
 .islandTopLeft h2 {
-    margin-right: 60px;
+    margin-right: 100px;
     margin-bottom: 20px;
 }
 
@@ -329,13 +329,35 @@ a:hover {
     border-radius: 6px 6px 0 0;
 }
 
-.digitalContainer, .dayContainer, .dateContainer, .creditsContainer, .timezoneContainer {
+.digitalContainer, .dayContainer, .dateContainer, .timezoneContainer {
     height: 33.333%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    /* border: 2px solid yellow; */
+}
+
+.home {
+    position: absolute;
+    right: 30px;
+    top: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease-out;
+}
+
+.home:hover {
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.creditsContainer {
+    position: absolute;
+    left: -18px;
 }
 
 .creditsItem {
@@ -350,20 +372,21 @@ a:hover {
 .linkItem {
     border: 1px solid rgba(255, 255, 255, 0.5);
     padding: 3px;
-    width: 50px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.5s ease-in-out;
 }
 
 .linkItem i {
-    font-size: 24px;
+    font-size: 20px;
     transition: all 0.5s ease-in-out;
 }
 
-.linkItem:hover i {
-    font-size: 50px;
+.linkItem:hover {
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .digitalItem, .dayItem, .dateItem, .timezoneItem {
@@ -674,7 +697,7 @@ a:hover {
     align-items: center;
     color:rgba(255,255,255,0.5);
     position: absolute;
-    right: 0;
+    right: -13px;
     padding-bottom: 6px;
     transition: all 0.3s ease-out
 }
@@ -720,6 +743,11 @@ a:hover {
     transition: all 0.3s ease-out;
 }
 
+#country:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+    outline: none;
+}
+
 #country:focus {
     border-color: rgba(255, 255, 255, 0.9);
     outline: none;
@@ -737,6 +765,40 @@ a:hover {
     margin-top: 25px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.countryOptions::-webkit-scrollbar {
+    display: none;
+}
+
+.dataCell {
+    width: 100%;
+    height: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease-out;
+}
+
+.dataCell:hover {
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dataCell p {
+    margin: 0;
 }
 
 .hourlyContainer {
