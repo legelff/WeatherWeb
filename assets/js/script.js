@@ -372,10 +372,86 @@ function displayTime(data) {
     // let localtime = data.forecast.location.localtime; this gets when was the last time weather was updated, not accurate
     const localtime = new Date(data.forecast.location.localtime);
 
-    DateTime.innerHTML = `
-        <h4>Local time: ${localtime}</h4>
-    `
+    // DateTime.innerHTML = `
+    //     <h4>Local time: ${localtime}</h4>
+    // `
+
+    // change gradient based on time
+    const hour = localtime.getHours()
+    const location = data.forecast.location.name;
+    const country = data.forecast.location.country;
+
+    // Start clock hands rotation
+    const deg = 6; // 360° / 60 seconds/minutes
+    const hr = document.querySelector('#hr');
+    const min = document.querySelector('#min');
+    const sec = document.querySelector('#sec');
+    
+    // Update the hands for the first time
+    updateClockHands(localtime, hr, min, sec, deg);
+
+    // Update the digital clock for the first time
+    updateDigitalClock(localtime, digitalClock);
+
+    // Update every second
+    setInterval(() => {
+        localtime.setSeconds(localtime.getSeconds() + 1); // Increment by 1 second
+        updateClockHands(localtime, hr, min, sec, deg);
+        updateDigitalClock(localtime, digitalClock); // Update digital clock
+    }, 1000);
+
+    // change to morning/day/evening/night gradient
+    if (hour >= 5 && hour < 12) {
+        // morning
+        DateTime.classList.add("morningGradient")
+        document.querySelector(".islandTopLeft h2").innerHTML = `
+            Good Morning ${location}, ${country}!
+        `
+    }
+
+    else if (hour >= 12 && hour < 17) {
+        // afternoon
+        DateTime.classList.add("dayGradient")
+        document.querySelector(".islandTopLeft h2").innerHTML = `
+            Good Afternoon ${location}, ${country}!
+        `
+    }
+
+    else if (hour >= 17 && hour < 21) {
+        // evening
+        DateTime.classList.add("eveningGradient")
+        document.querySelector(".islandTopLeft h2").innerHTML = `
+            Good Evening ${location}, ${country}!
+        `
+    }
+
+    else {
+        // night
+        DateTime.classList.add("nightGradient")
+        document.querySelector(".islandTopLeft h2").innerHTML = `
+            Good Night ${location}, ${country}!
+        `
+    }
 }
+
+function updateClockHands(localtime, hr, min, sec, deg) {
+    const hh = localtime.getHours() * 30 + (localtime.getMinutes() / 2); // Each hour is 30 degrees
+    const mm = localtime.getMinutes() * deg;
+    const ss = localtime.getSeconds() * deg;
+
+    hr.style.transform = `rotateZ(${hh}deg)`;
+    min.style.transform = `rotateZ(${mm}deg)`;
+    sec.style.transform = `rotateZ(${ss}deg)`;
+}
+
+// New function to update the digital clock
+function updateDigitalClock(localtime, digitalClock) {
+    const hours = String(localtime.getHours()).padStart(2, '0');
+    const minutes = String(localtime.getMinutes()).padStart(2, '0');
+    const seconds = String(localtime.getSeconds()).padStart(2, '0');
+    digitalClock.textContent = `${hours}:${minutes}:${seconds}`;
+}
+
 // display historical data. 6 days from yesterday
 function displayHistoricalData(data) {
 

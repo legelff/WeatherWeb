@@ -4,7 +4,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0px;
-    background-image: url("../img/backgroundImage3.jpg");
+    background-image: url("../img/backgroundDefault.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -59,6 +59,230 @@ h1, h2, h3 {
     transition: all 0.5s ease-out;
 }
 
+.eveningGradient, .morningGradient, .dayGradient, .nightGradient {
+    position: relative;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.eveningGradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(to bottom right, rgba(53, 0, 104, 1), rgba(255, 105, 120, 1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    z-index: -1;
+}
+
+.nightGradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(to bottom right, rgba(33, 33, 48, 1), rgba(57, 48, 74, 1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    z-index: -1;
+}
+
+.morningGradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(to bottom right, rgba(228, 61, 0, 1), rgba(255, 233, 0, 1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    z-index: -1;
+}
+
+.dayGradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(to bottom right, rgba(228, 243, 227, 1), rgba(92, 169, 233, 1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    z-index: -1;
+}
+
+.islandTopLeft {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.islandTopLeft h2 {
+    margin-right: 60px;
+    margin-bottom: 20px;
+}
+
+.generalContainer {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+}
+
+.generalItem {
+    width: 50%;
+    box-sizing: border-box;
+}
+
+.clockContainer, .dateDayCreditsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.analog {
+    height: 67.667%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.Clock {
+    width: 100%; /* Set the width to 150px */
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background: url(https://i.postimg.cc/xjsKqk26/Clock.jpg); */
+    /* background-size: cover; */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    /* box-shadow: 0 -5px  5px rgba(255,255,255,0.05),
+                inset 0 -5px 5px rgba(255,255,255,0.05),
+                0 5px 5px rgba(87, 85, 85, 0.3),
+                inset 0 5px 5px rgba(46, 45, 45, 0.3); */
+}
+
+.Clock:before {
+    content: '';
+    position: absolute;
+    width: 8px; /* Adjusted size */
+    height: 8px; /* Adjusted size */
+    background: #fff;
+    border-radius: 50%;
+    z-index: 10000;
+}
+
+.Clock .hour,
+.Clock .minute,
+.Clock .second {
+    position: absolute;
+}
+
+.Clock .hour, .hr {
+    width: 25px; /* Adjusted size for hour hand */
+    height: 85px; /* Adjusted size for hour hand */
+}
+
+.Clock .minute, .min {
+    width: 15px; /* Adjusted size for minute hand */
+    height: 135px; /* Adjusted size for minute hand */
+}
+
+.Clock .second, .sec {
+    width: 10px; /* Adjusted size for second hand */
+    height: 135px; /* Adjusted size for second hand */
+}
+
+.hr, .min, .sec {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.hr:before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 55px; /* Adjusted height for hour hand */
+    background: #ffffff;
+    z-index: 10;
+    border-radius: 6px 6px 0 0;
+}
+
+.min:before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 80px; /* Adjusted height for minute hand */
+    background: gray;
+    z-index: 11;
+    border-radius: 6px 6px 0 0;
+}
+
+.sec:before {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 80px; /* Adjusted height for second hand */
+    background: rgba(255, 0, 0, 0.911);
+    z-index: 12;
+    border-radius: 6px 6px 0 0;
+}
+
+.digital {
+    height: 33.333%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    font-weight: bolder;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+}
+
+.day {
+    background-color: purple;
+    height: 33.33%;
+}
+
+.date {
+    background-color: greenyellow;
+    height: 33.33%;
+}
+
+.credits {
+    background-color: gray;
+    height: 33.33%;
+}
+
 .islandTopCenter {
     flex: 80%;
     display: flex;
@@ -94,6 +318,7 @@ h1, h2, h3 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: stretch;
     gap: 10px;
 }
 
