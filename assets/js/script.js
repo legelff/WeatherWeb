@@ -45,6 +45,42 @@ document.querySelectorAll('.island').forEach(island => {
     });
 });
 
+// for home and fullscreen
+document.querySelectorAll('.islandControlsItem').forEach(island => {
+    island.addEventListener('mousemove', (e) => {
+        // Get the dimensions of the island
+        const { offsetWidth: width, offsetHeight: height } = island;
+         
+        // Get the center of the island
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        // Calculate the mouse's position relative to the center
+        const mouseX = e.clientX - island.getBoundingClientRect().left;
+        const mouseY = e.clientY - island.getBoundingClientRect().top;
+
+        // Calculate how much to tilt the island based on mouse position
+        const tiltX = (mouseY - centerY) / centerY * 10; // Adjust the tilt value as needed
+        const tiltY = (mouseX - centerX) / centerX * -10; // Invert Y tilt for effect
+
+        // Apply transform
+        island.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+        // Calculate shadow position based on tilt
+        const shadowX = (tiltY / 10) * 10; // Shadow moves based on Y tilt
+        const shadowY = (tiltX / 10) * 10; // Shadow moves based on X tilt
+
+        // Apply new shadow position
+        island.style.boxShadow = `${shadowX}px ${shadowY}px 35px rgba(0, 0, 0, 0.5)`; // Adjust shadow size as needed
+    });
+
+    island.addEventListener('mouseleave', () => {
+        // Reset the tilt and shadow when the mouse leaves the island
+        island.style.transform = 'rotateX(0) rotateY(0)';
+        island.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.5)'; // Reset to original shadow
+    });
+});
+
 // Event listener for search button
 
 document.querySelector(".searchButton").addEventListener("click", function (e) {
@@ -60,35 +96,34 @@ document.addEventListener("keydown", function (e) {
 });
 
 // back button 
-document.querySelector(".home").addEventListener("click", function() {
+document.querySelector(".islandHome").addEventListener("click", function() {
     location.reload()
 })
 
-// home button transparancy
-const homeElement = document.querySelector(".home");
+// fullscreen 
+document.querySelector(".islandFullscreen").addEventListener("click", function() {
+    toggleFullscreen()
+})
 
-let hideTimeout;
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        document.querySelector(".islandControls").classList.add("none")
+    } else {
+        document.exitFullscreen();
+        document.querySelector(".islandControls").classList.remove("none")
+    }
+}
 
-// Function to set opacity to 0.1 after 10 seconds
-const startHideTimer = () => {
-    hideTimeout = setTimeout(() => {
-        homeElement.style.opacity = "0.1";
-    }, 10000); // 10 seconds
-};
-
-// Function to reset opacity when hovered
-const resetOpacity = () => {
-    clearTimeout(hideTimeout); // Clear the previous timer
-    homeElement.style.opacity = "1"; // Set opacity to full
-    startHideTimer(); // Restart the timer
-};
-
-// Add event listeners
-homeElement.addEventListener("mouseenter", resetOpacity);
-homeElement.addEventListener("mouseleave", startHideTimer);
-
-// Start the timer initially
-startHideTimer();
+// Listen for fullscreen changes to manage the visibility of islandControls
+document.addEventListener('fullscreenchange', () => {
+    const islandControls = document.querySelector('.islandControls');
+    if (document.fullscreenElement) {
+        islandControls.classList.add('none'); // Hide when entering fullscreen
+    } else {
+        islandControls.classList.remove('none'); // Show when exiting fullscreen
+    }
+});
 
 const hourlyContainer = document.querySelector('.hourlyContainer');
 
@@ -164,15 +199,20 @@ function displayMainData(data, index = 0) {
     const country = data.forecast.location.country;
     const region = data.forecast.location.region;
     const temperature = data.forecast.forecast.forecastday[index].day.avgtemp_c;
+    const maxtemp = data.forecast.forecast.forecastday[index].day.maxtemp_c;
+    const mintemp = data.forecast.forecast.forecastday[index].day.mintemp_c;
     const condition = data.forecast.forecast.forecastday[index].day.condition.text;
     const icon = "https:" + data.forecast.forecast.forecastday[index].day.condition.icon;
     const max_wind_speed = data.forecast.forecast.forecastday[index].day.maxwind_kph;
+    const wind_direction = data.forecast.forecast.forecastday[index].hour[10].wind_dir;
     const humidity = data.forecast.forecast.forecastday[index].day.avghumidity;
     const uv = data.forecast.forecast.forecastday[index].day.uv;
     const air_qual = data.forecast.forecast.forecastday[index].day.air_quality["us-epa-index"]; 
     const rain_chance = data.forecast.forecast.forecastday[index].day.daily_chance_of_rain;
     const rain_level = data.forecast.forecast.forecastday[index].day.totalprecip_mm;
     var qualDef = ""
+
+    console.log(wind_direction)
     
     switch (air_qual) {
         case 1:
@@ -203,66 +243,83 @@ function displayMainData(data, index = 0) {
             qualDef = "Unknown"
             break;
     }
-    
-    weatherContainer.innerHTML = `
-        <h2>${formattedDate} Weather in ${location}, ${region ? region + "," : ""} ${country}</h3>
-        <img src="${icon}">
-        <p>Temperature: ${temperature}°C</p>
-        <p>Condition: ${condition}</p>
-        <p>Wind kph: ${max_wind_speed}</p>
-        <p>Humidity: ${humidity}</p>
-        <p>UV: ${uv}</p>
-        <p>Air Quality: ${qualDef}</p>
-        <p>Chance of rain: ${rain_chance}%</p>
-        <p>precipitation: ${rain_level} mm</p>
+
+    // location name and date
+    document.querySelector(".dayWeather").innerHTML = `${formattedDate}`
+    document.querySelector(".locationWeather").innerHTML = `
+    ${region ? `${region}, ` : ''}${location}, ${country}
     `;
+
+    // thermometer + temperature 
+    // Update the temperature value and thermometer fill
+    const tempValueElement = document.querySelector(".tempInfo h2");
+    const thermometerFill = document.querySelector(".thermometer-fill");
+    var maxTempPlace = document.querySelector(".maxTemp")
+    var minTempPlace = document.querySelector(".minTemp")
+
+    // Update temperature text
+    tempValueElement.innerHTML = `${Math.round(temperature)}°C`;
+    maxTempPlace.innerHTML = `${Math.round(maxtemp)}°C`
+    minTempPlace.innerHTML = `${Math.round(mintemp)}°C`
+
+    // Map temperature to a percentage fill height for thermometer (assuming 0°C to 40°C range)
+    const fillHeight = Math.min(Math.max((temperature / 40) * 100, 0), 100);
+    thermometerFill.style.height = `${fillHeight}%`;
+
+    // condition
+    var conditionh2 = document.querySelector(".conditionInfo h2")
+    var conditionIcon = document.querySelector(".conditionIcon")
+
+    conditionh2.innerHTML = `${condition}`
+    conditionIcon.innerHTML = `<img src="${icon}" alt="condition">`
+
+    // rainmeter + rain elements
+    // Update the temperature value and rainmeter fill
+    const rainValueElement = document.querySelector(".rainInfo h2");
+    const rainmeterFill = document.querySelector(".rainmeter-fill");
+
+    // Update rain text
+    rainValueElement.innerHTML = `${rain_chance}%`;
+
+    rainmeterFill.style.height = `${Math.min(Math.max(rain_chance, 0), 100)}%`;
+
+    // humidity and humiditymeter
+    // Update the humidity value and humidity fill
+    const humidityValueElement = document.querySelector(".humidityInfo h2");
+    const humiditymeterFill = document.querySelector(".humiditymeter-fill");
+
+    // Update humidity text
+    humidityValueElement.innerHTML = `${humidity}%`;
+
+    //fill
+    const humfillHeight = Math.min(Math.max(humidity, 0), 100);
+    humiditymeterFill.style.height = `${humfillHeight}%`;
+
+    // airqual and airqualmeter
+    // Update the airqual value and airqualmeter fill
+    const airqualValueElement = document.querySelector(".airqualInfo h2");
+    const airqualmeterFill = document.querySelector(".airqualmeter-fill");
+
+    // Update airqual text
+    airqualValueElement.innerHTML = `${qualDef}`;
+
+    //fill
+    // air_qual is in the range of 1 to 6
+    const airqualfillHeight = Math.min(Math.max(air_qual, 1), 6); // Ensure air_qual is between 1 and 6
+
+    // Convert air quality from a scale of 1-6 to a percentage (0-100)
+    const airqualPercentage = ((6 - airqualfillHeight) / 5) * 100; // Inverted mapping: 1 -> 100%, 6 -> 0%
+
+    airqualmeterFill.style.height = `${airqualPercentage}%`;
+
+    // precipitation
+    var preciph2 = document.querySelector(".percipInfo h2")
+
+    preciph2.innerHTML = `${rain_level} mm`
+
     weatherContainer.classList.remove('hidden');
     displayHourlyData(data, index);
     displayAstronomy(data, index);
-
-    // for dynamic background in top left island (to do)
-    // const initialCondition = data.current.current.condition.text.toLowerCase();
-
-    // switch (true) {
-    //     case /drizzle/.test(initialCondition): // Drizzle is more specific, so it goes first
-    //         console.log("Weather is Drizzle");
-    //         break;
-
-    //     case /sleet/.test(initialCondition):
-    //         console.log("Weather is Sleet");
-    //         break;
-
-    //     case /snow/.test(initialCondition):
-    //         console.log("Weather is Snowy");
-    //         break;
-
-    //     case /ice/.test(initialCondition):
-    //         console.log("Weather has Ice");
-    //         break;
-
-    //     case /rain|shower/.test(initialCondition): // Rain includes showers but avoids drizzle
-    //         console.log("Weather is Rainy");
-    //         break;
-
-    //     case /thunder/.test(initialCondition):
-    //         console.log("Weather is Thunderstorm");
-    //         break;
-
-    //     case /mist|fog/.test(initialCondition):
-    //         console.log("Weather is Foggy");
-    //         break;
-
-    //     case /sunny|clear|overcast/.test(initialCondition):
-    //         console.log("Weather is Sunny");
-    //         break;
-
-    //     case /cloudy/.test(initialCondition): // Cloudy goes last to avoid partial matches with "partly cloudy"
-    //         console.log("Weather is Cloudy");
-    //         break;
-
-    //     default:
-    //         console.log("Weather condition is not recognized");
-    // }
 }
 
 // Function to display current weather data in top center
@@ -447,9 +504,12 @@ function displayTime(data) {
     }, 1000);
 
     // change to morning/day/evening/night gradient
+    // const body = document.querySelector("body");
+
     if (hour >= 5 && hour < 12) {
         // morning
         DateTime.classList.add("morningGradient")
+        // body.style.backgroundImage = "url('./assets/img/morning.png')";
         document.querySelector(".islandTopLeft h2").innerHTML = `
             Good Morning ${location}, ${country}!
         `
@@ -458,6 +518,7 @@ function displayTime(data) {
     else if (hour >= 12 && hour < 17) {
         // afternoon
         DateTime.classList.add("dayGradient")
+        // body.style.backgroundImage = "url('./assets/img/day.png')";
         document.querySelector(".islandTopLeft h2").innerHTML = `
             Good Afternoon ${location}, ${country}!
         `
@@ -466,6 +527,7 @@ function displayTime(data) {
     else if (hour >= 17 && hour < 21) {
         // evening
         DateTime.classList.add("eveningGradient")
+        // body.style.backgroundImage = "url('./assets/img/evening.png')";
         document.querySelector(".islandTopLeft h2").innerHTML = `
             Good Evening ${location}, ${country}!
         `
@@ -474,6 +536,7 @@ function displayTime(data) {
     else {
         // night
         DateTime.classList.add("nightGradient")
+        // body.style.backgroundImage = "url('./assets/img/night.png')";
         document.querySelector(".islandTopLeft h2").innerHTML = `
             Good Night ${location}, ${country}!
         `

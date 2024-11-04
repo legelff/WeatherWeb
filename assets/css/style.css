@@ -4,7 +4,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0px;
-    background-image: url("../img/backgroundDefault.webp");
+    background-image: url("../img/night.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -52,6 +52,45 @@ h1, h2, h3 {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     transition: transform 0.5s ease-out, box-shadow 0.5s ease-out;
     position: relative;
+}
+
+.islandControls {
+    display: flex;
+    flex-direction: row;
+    background-color: transparent;
+    backdrop-filter: blur(0px);
+    border: none;
+    position: relative;
+    gap: 20px;
+    padding: 0;
+    flex: 5%;
+}
+
+.islandControlsItem {
+    width: 50%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+    gap: 10px;
+}
+
+.islandControlsItem i {
+    margin-top: 1px;
+}
+
+.islandControlsItem:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.15);
+    color:rgba(255,255,255,0.9);
 }
 
 .islandTopLeft, .islandBottomLeft, .islandTopRight, .islandBottomRight {
@@ -217,7 +256,6 @@ a:hover {
 }
 
 .islandTopLeft h2 {
-    margin-right: 100px;
     margin-bottom: 20px;
 }
 
@@ -225,6 +263,7 @@ a:hover {
     display: flex;
     flex: 1;
     flex-direction: row;
+    gap: 10px;
 }
 
 .generalItem {
@@ -235,7 +274,16 @@ a:hover {
 .clockContainer, .dateDayCreditsContainer {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
+
+.dateDayCreditsContainer {
+    gap: 10px;
+}
+
+/* .dateDayCreditsContainer {
+    gap: 20px;
+} */
 
 .analog {
     height: 67.667%;
@@ -333,26 +381,10 @@ a:hover {
     height: 33.333%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.home {
-    position: absolute;
-    right: 30px;
-    top: 25px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 12px;
-    padding: 10px;
-    color: rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease-out;
-}
-
-.home:hover {
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    color: rgba(255, 255, 255, 0.9);
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.15);
+    align-items: center;
+    position: relative;
 }
 
 .creditsContainer {
@@ -390,17 +422,17 @@ a:hover {
 }
 
 .digitalItem, .dayItem, .dateItem, .timezoneItem {
-    width: 100%;
-    padding-left: 30px;
+    width: 100%; 
     display: flex;
+    padding-left: 20px;
     justify-content: center;
     flex-direction: column;
 }
 
-.digitalItem {
+/* .digitalItem {
     padding: 0;
     width: auto;
-}
+} */
 
 .digitalItem p, .digitalItem h2, .dayItem p, .dayItem h2, .dateItem p, .dateItem h2, .creditsItem p, .creditsItem h2, .timezoneItem p, .timezoneItem h2 {
     margin: 0;
@@ -415,6 +447,10 @@ a:hover {
 }
 
 .dayItem h2, .dateItem h2 {
+    font-size: x-large;
+}
+
+.dayItem h2 {
     font-size: x-large;
 }
 
@@ -802,19 +838,20 @@ a:hover {
 }
 
 .hourlyContainer {
-    width: calc(100% - 40px); /* Full width minus padding on each side */
+    width: calc(100% - 40px); /* Full width minus padding */
+    height: 30%; /* Fixed height to avoid overflow */
+    max-height: 150px; /* Optional: Set a max height if needed */
     background-color: rgba(255, 255, 255, 0.0);
-    height: calc(30% - 40px); /* Takes full height minus spacing */
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    position: absolute; /* Positions it within .islandTopCenter */
-    bottom: 20px; /* Spacing from the bottom */
-    left: 20px; /* Equal spacing from the left */
-    right: 20px; /* Equal spacing from the right */
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
     display: flex;
     flex-direction: row;
     overflow-x: scroll;
-    overflow-y:hidden;
+    overflow-y: hidden;
     scrollbar-width: none;
 }
 
@@ -824,16 +861,199 @@ a:hover {
     align-items: center;
     flex-direction: column;
     border-radius: 12px;
-    width: 100px;
-    height: 100%; /* Set a fixed height */
-    padding: 10px; /* Add padding for spacing inside */
+    /* width: 100px; */
+    flex-shrink: 0; 
+    flex-grow: 0; 
+    padding: 10px;
     box-sizing: border-box;
+    min-height: 0; 
 }
 
 .hourlyItem h5,
 .hourlyItem img,
 .hourlyItem p {
     margin: 0; /* Remove default margins for consistent spacing */
+}
+
+.weather h2, .weather p {
+    margin: 0;
+}
+
+.weather p {
+    font-size: 12px;
+}
+
+.weather {
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.titlesWeather {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.mainContainer {
+    flex-grow: 1; /*i love this property*/
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mainRow {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.mainRowItem {
+    flex: 1;
+    display: flex;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.mainRowItemIcon {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.conditionIcon {
+    margin: 0;
+}
+
+.percipIcon {
+    margin: 0;
+}
+
+.mainRowItemIcon img {
+    width: 50px;
+    height: 50px;
+}
+
+.percipIcon img {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    filter: invert(50%);
+}
+
+.mainRowItemExtra {
+    color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* thermometer */
+.thermometer {
+    width: 20px;
+    height: 30px;
+    background-color: transparent;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.thermometer-fill {
+    width: 100%;
+    background-color: #ff4b4b;
+    position: absolute;
+    bottom: 0;
+    border-radius: 10px;
+    transition: height 0.3s ease;
+}
+
+/* rainmeter */
+.rainmeter {
+    width: 20px;
+    height: 30px;
+    background-color: transparent;
+    border-radius: 52% 48% 50% 50% / 73% 75% 25% 27%; /* Raindrop shape */
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.rainmeter::before {
+    content: "";
+    position: absolute;
+    bottom: -20px; /* Adjust for better alignment */
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.rainmeter-fill {
+    width: 100%;
+    background-color: #0a33da;
+    position: absolute;
+    bottom: 0;
+    border-radius: 50% 50% 0 0;
+    transition: height 0.3s ease;
+}
+
+/* humiditymeter */
+.humiditymeter {
+    width: 20px;
+    height: 30px;
+    background-color: transparent;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.humiditymeter-fill {
+    width: 100%;
+    background-color: #a0a0a0;
+    position: absolute;
+    bottom: 0;
+    border-radius: 10px;
+    transition: height 0.3s ease;
+}
+
+/* airqualmeter */
+.airqualmeter {
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.airqualmeter-fill {
+    width: 100%;
+    background-color: #1dd2f3;
+    position: absolute;
+    bottom: 0;
+    border-radius: 6px;
+    transition: height 0.3s ease;
 }
 
 .hidden {

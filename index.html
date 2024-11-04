@@ -11,11 +11,18 @@
         <div class="blurFilter">
             <div class="container">
                 <div class="containerLeft hidden">
-                    <div class="island islandTopLeft">
-                        <div class="home">
+                    <div class="islandControls">
+                        <div class="islandControlsItem islandHome">
+                            <i class='bx bx-home-alt-2' style='color:#ffffff' ></i>
                             Home
                         </div>
 
+                        <div class="islandControlsItem islandFullscreen">
+                            <i class='bx bx-fullscreen' style='color:#ffffff'  ></i>
+                            Fullscreen
+                        </div>
+                    </div>
+                    <div class="island islandTopLeft eveningGradient">
                         <h2></h2>
 
                         <div class="generalContainer">
@@ -109,8 +116,127 @@
                         <div class="countryOptions">
                         </div>
 
+                        <!-- main info goes here -->
                         <div class="weather none">
-                            
+                            <div class="titlesWeather">
+                                <h2 class="dayWeather">
+                                    
+                                </h2>
+
+                                <h2 class="locationWeather">
+                                    
+                                </h2>
+                            </div>
+
+                            <div class="mainContainer">
+                                <div class="mainRow mainRow1">
+                                    <div class="mainRowItem mainRow1Item temp">
+                                        <div class="mainRowItemInfo mainRow1ItemInfo tempInfo">
+                                            <p>Temperature</p>
+                                            <h2></h2>
+                                        </div>
+
+                                        <!-- extra for min/max temp -->
+                                        <div class="mainRowItemExtra mainRow1ItemExtra tempExtra">
+                                            <div class="minContainer">
+                                                <p>Min: <span class="minTemp"></span></p>
+                                            </div>
+                                            <div class="maxContainer">
+                                                <p>Max: <span class="maxTemp"></span></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow1ItemIcon tempIcon">
+                                            <div class="thermometer">
+                                                <div class="thermometer-fill"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mainRowItem mainRow1Item condition">
+                                        <div class="mainRowItemInfo mainRow1ItemInfo conditionInfo">
+                                            <p>Condition</p>
+                                            <h2></h2>
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow1ItemIcon conditionIcon">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="mainRowItem mainRow1Item rain">
+                                        <div class="mainRowItemInfo mainRow1ItemInfo rainInfo">
+                                            <p>Rain</p>
+                                            <h2></h2>
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow1ItemIcon rainIcon">
+                                            <div class="rainmeter">
+                                                <div class="rainmeter-fill"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mainRowItem mainRow1Item humidity">
+                                        <div class="mainRowItemInfo mainRow1ItemInfo humidityInfo">
+                                            <p>Humidity</p>
+                                            <h2></h2>
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow1ItemIcon humidityIcon">
+                                            <div class="humiditymeter">
+                                                <div class="humiditymeter-fill"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mainRow mainRow2">
+                                    <div class="mainRowItem mainRow2Item wind">
+                                        <div class="mainRowItemInfo mainRow2ItemInfo windInfo">
+                                            <!-- to do -->
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow2ItemIcon windIcon">
+                                            <!-- to do -->
+                                        </div>
+                                    </div>
+
+                                    <div class="mainRowItem mainRow2Item airqual">
+                                        <div class="mainRowItemInfo mainRow2ItemInfo airqualInfo">
+                                            <p>Air Quality</p>
+                                            <h2></h2>
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow2ItemIcon airqualIcon">
+                                            <div class="airqualmeter">
+                                                <div class="airqualmeter-fill"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mainRowItem mainRow2Item uv">
+                                        <div class="mainRowItemInfo mainRow2ItemInfo percipInfo">
+                                            <p>Precipitation</p>
+                                            <h2></h2>
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow2ItemIcon percipIcon">
+                                            <img src="./assets/img/cloud.png" alt="cloud">
+                                        </div>
+                                    </div>
+
+                                    <div class="mainRowItem mainRow2Item percip">
+                                        <div class="mainRowItemInfo mainRow2ItemInfo uvInfo">
+
+                                        </div>
+
+                                        <div class="mainRowItemIcon mainRow2ItemIcon uvIcon">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="hourlyContainer none">
