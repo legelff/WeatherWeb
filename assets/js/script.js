@@ -109,9 +109,19 @@ function toggleFullscreen() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
         document.querySelector(".islandControls").classList.add("none")
+        // document.querySelector(".hourlyContainer").classList.add("hourlyContainerFullscreen")
+        // document.querySelectorAll(".hourlyItem").forEach(item => {
+        //     item.classList.add("hourlyItemFullscreen");
+        // });
+        document.querySelector(".weather").classList.add("weatherFullscreen")
     } else {
         document.exitFullscreen();
         document.querySelector(".islandControls").classList.remove("none")
+        // document.querySelector(".hourlyContainer").classList.remove("hourlyContainerFullscreen")
+        // document.querySelectorAll(".hourlyItem").forEach(item => {
+        //     item.classList.remove("hourlyItemFullscreen");
+        // });
+        document.querySelector(".weather").classList.remove("weatherFullscreen")
     }
 }
 
@@ -120,8 +130,18 @@ document.addEventListener('fullscreenchange', () => {
     const islandControls = document.querySelector('.islandControls');
     if (document.fullscreenElement) {
         islandControls.classList.add('none'); // Hide when entering fullscreen
+        // document.querySelector(".hourlyContainer").classList.add("hourlyContainerFullscreen")
+        // document.querySelectorAll(".hourlyItem").forEach(item => {
+        //     item.classList.add("hourlyItemFullscreen");
+        // });
+        document.querySelector(".weather").classList.add("weatherFullscreen")
     } else {
         islandControls.classList.remove('none'); // Show when exiting fullscreen
+        // document.querySelector(".hourlyContainer").classList.remove("hourlyContainerFullscreen")
+        // document.querySelectorAll(".hourlyItem").forEach(item => {
+        //     item.classList.remove("hourlyItemFullscreen");
+        // });
+        document.querySelector(".weather").classList.remove("weatherFullscreen")
     }
 });
 
@@ -195,6 +215,7 @@ function displayMainData(data, index = 0) {
     }).format(date);
 
     // Extract relevant information from data
+    const hourLocation = start = new Date(data.forecast.location.localtime).getHours()
     const location = data.forecast.location.name;
     const country = data.forecast.location.country;
     const region = data.forecast.location.region;
@@ -204,15 +225,13 @@ function displayMainData(data, index = 0) {
     const condition = data.forecast.forecast.forecastday[index].day.condition.text;
     const icon = "https:" + data.forecast.forecast.forecastday[index].day.condition.icon;
     const max_wind_speed = data.forecast.forecast.forecastday[index].day.maxwind_kph;
-    const wind_direction = data.forecast.forecast.forecastday[index].hour[10].wind_dir;
+    const wind_direction = data.forecast.forecast.forecastday[index].hour[hourLocation].wind_dir;
     const humidity = data.forecast.forecast.forecastday[index].day.avghumidity;
     const uv = data.forecast.forecast.forecastday[index].day.uv;
     const air_qual = data.forecast.forecast.forecastday[index].day.air_quality["us-epa-index"]; 
     const rain_chance = data.forecast.forecast.forecastday[index].day.daily_chance_of_rain;
     const rain_level = data.forecast.forecast.forecastday[index].day.totalprecip_mm;
     var qualDef = ""
-
-    console.log(wind_direction)
     
     switch (air_qual) {
         case 1:
@@ -316,6 +335,84 @@ function displayMainData(data, index = 0) {
     var preciph2 = document.querySelector(".percipInfo h2")
 
     preciph2.innerHTML = `${rain_level} mm`
+
+    // uv and uvmeter
+    // Update the uv value and uvmeter fill
+    const uvValueElement = document.querySelector(".uvInfo h2");
+    const uvmeterFill = document.querySelector(".uvmeter-fill");
+
+    // Update uv text
+    uvValueElement.innerHTML = `${Math.round(uv)}`;
+
+    //fill
+    // uv is in the range of 1 to 11
+    const uvfillHeight = Math.round(uv);
+
+    // Map UV from a scale of 1-11 to a percentage (0-100)
+    const uvPercentage = (uvfillHeight / 11) * 100;
+
+    uvmeterFill.style.height = `${uvPercentage}%`;
+
+    // // Define a variable to hold the degree value
+    let degWind = 0;
+
+    // Use switch case to determine the degrees based on wind_dir
+    switch (wind_direction) {
+        case "N":
+            degWind = 0;
+            break;
+        case "NNE":
+            degWind = 22.5;
+            break;
+        case "NE":
+            degWind = 45;
+            break;
+        case "E":
+            degWind = 90;
+            break;
+        case "ESE":
+            degWind = 112.5;
+            break;
+        case "SE":
+            degWind = 135;
+            break;
+        case "SSE":
+            degWind = 157.5;
+            break;
+        case "S":
+            degWind = 180;
+            break;
+        case "SSW":
+            degWind = 202.5;
+            break;
+        case "SW":
+            degWind = 225;
+            break;
+        case "WSW":
+            degWind = 247.5;
+            break;
+        case "W":
+            degWind = 270;
+            break;
+        case "WNW":
+            degWind = 292.5;
+            break;
+        case "NW":
+            degWind = 315;
+            break;
+        case "NNW":
+            degWind = 337.5;
+            break;
+        default:
+            degWind = 0; // Default case if direction is not recognized
+    }
+
+    // Rotate the wind icon image
+    const windIconImg = document.querySelector(".windIcon img");
+    windIconImg.style.transform = `rotate(${degWind}deg)`;
+
+    // wind speed html
+    document.querySelector(".windInfo h2").innerHTML = `${max_wind_speed} km/h`
 
     weatherContainer.classList.remove('hidden');
     displayHourlyData(data, index);
@@ -730,7 +827,6 @@ function displayLocations(locations) {
                 </div>
             `
         }
-        console.log(1);
         
         document.querySelectorAll(".dataCell").forEach(function(cell) {
             cell.addEventListener("click", function() {
@@ -751,7 +847,6 @@ async function fetchLocations(location) {
         
         const location_data = await fetch(`http://127.0.0.1:5000/api/search?location=${location}`);
         const loc = await location_data.json();
-        console.log(loc);
         displayLocations(loc);
         
     }
@@ -772,9 +867,6 @@ async function fetchWeather(location) {
         
         const pexel_images = await fetch(`http://127.0.0.1:5000/api/images?location=${data.forecast.location.country}`);
         const images = await pexel_images.json();
-
-        console.log("Weather Data:", data); // remove them after testing is over
-        console.log("Image data:", images); // remove them after testing is over
 
         if (data.error) {
             displayError("Weather data not found.");
