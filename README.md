@@ -2,7 +2,7 @@
 
 A simple and visually stunning web application that provides current weather information for any location.
 
-![weather app demo](assets\img\demo.png)
+![weather app demo](demo.png)
 
 ## Features
 
