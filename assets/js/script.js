@@ -214,6 +214,7 @@ function displayMainData(data, index = 0) {
         day: 'numeric'
     }).format(date);
 
+    console.log(data)
     // Extract relevant information from data
     const hourLocation = start = new Date(data.forecast.location.localtime).getHours()
     const location = data.forecast.location.name;
@@ -228,7 +229,7 @@ function displayMainData(data, index = 0) {
     const wind_direction = data.forecast.forecast.forecastday[index].hour[hourLocation].wind_dir;
     const humidity = data.forecast.forecast.forecastday[index].day.avghumidity;
     const uv = data.forecast.forecast.forecastday[index].day.uv;
-    const air_qual = data.forecast.forecast.forecastday[index].day.air_quality["us-epa-index"]; 
+    const air_qual = data.forecast.current.air_quality["us-epa-index"];
     const rain_chance = data.forecast.forecast.forecastday[index].day.daily_chance_of_rain;
     const rain_level = data.forecast.forecast.forecastday[index].day.totalprecip_mm;
     var qualDef = ""
@@ -878,7 +879,7 @@ async function fetchWeather(location) {
             displayImages(images);
         }
     } catch (error) {
-        displayError("An error occurred."); // Adds box below, you have to display it somewhere else @Aryan
+        displayError(error); // Adds box below, you have to display it somewhere else @Aryan
     }
 }
 // retrieve user location and use lat and long for location
