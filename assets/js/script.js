@@ -214,7 +214,8 @@ function displayMainData(data, index = 0) {
         day: 'numeric'
     }).format(date);
 
-    console.log(data)
+    // my fav car is a porsche 918 spyder 💯💯🔥😍
+
     // Extract relevant information from data
     const hourLocation = start = new Date(data.forecast.location.localtime).getHours()
     const location = data.forecast.location.name;
