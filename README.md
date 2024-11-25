@@ -1,6 +1,7 @@
 # Weather Web Application
 
-A simple and visually stunning web application that provides current weather information for any location.
+A simple and visually stunning web application that provides current weather information for any location. <br>
+[Link to website](https://l145.be/weatherweb.html)
 
 ![weather app demo](demo.png)
 
@@ -32,7 +33,7 @@ A simple and visually stunning web application that provides current weather inf
   - **Error Handling**: User-friendly error messages for invalid inputs or location detection issues.
 
 - **Easy Setup**:
-  - **Simple Configuration**: No configuration, just visit our website!
+  - **Simple Configuration**: No configuration, just visit our [website](https://l145.be/weatherweb.html)!
 
 ## Technologies Used
 
@@ -46,7 +47,7 @@ A simple and visually stunning web application that provides current weather inf
 ## Installation
 
 1. No installation needed! 
-2. here's the website: (Not released yet!)
+2. here's the website: [WeatherWeb](https://l145.be/weatherweb.html)
 
 ## Support
 
